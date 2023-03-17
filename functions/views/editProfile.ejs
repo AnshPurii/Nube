@@ -1,0 +1,183 @@
+<% layout('/template/boilerplate') -%>
+ 
+
+                    <div class="getInTouchContainer profileContainer">
+                        <div class="img">
+                            <a href="<%=devFun%>/editProfilePic/<%= uid %>">
+                                <img src=""
+                                    alt="" srcset="" id="profilePic">
+                                <div class="imgOverlay"><i class="fas fa-pen"></i></div>
+                            </a>
+                        </div>
+                        <div class="pageHead">
+                            <h3>Profile Details</h3>
+                            <form action="<%= devFun %>/profile/<%=uid%> " method="post" class="needs-validation"
+                                novalidate>
+                                <div class="formInput mb-5">
+                                    <label for="emailclass=" class='form-label text-white-50'>Email ID</label>
+                                    <input type="email" name="email" id="email" class="form-control text-white-50"
+                                        value="<%=user.email%> " required readonly>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please enter a valid email ID
+                                    </div>
+                                </div>
+                                <div class="formInput mb-5">
+                                    <label for="name" class="form-label text-white-50">Name</label>
+                                    <input type="text" name="name" id="name" class="form-control text-light" required
+                                        value="<%=user.name%> ">
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please enter your name
+                                    </div>
+                                </div>
+                              
+                                <div class="formInput mb-5">
+                                    <label for="number" class="form-label text-white-50">Phone Number</label>
+                                    <input type="tel" name="number" id="number" class="form-control text-light"
+                                        value="<%=user.number%> " required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please enter a valid phone number
+                                    </div>
+                                </div>
+
+                                
+                                <div class="d-flex justify-content-center mb-3" id="btnSave">
+                                    <div class="btn btn-info w-50">Save details</div>
+                                </div>
+                                <p class="text-info" id="resetPrompt" hidden>Sent password reset email!</p>
+                                <div class="d-flex justify-content-center" id="btnPwdReset">
+                                    <div class="btn btn-danger ">Reset password</div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                    <div class="modal" tabindex="-1" id="myModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content dark bg-dark">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Please re-enter account details to change email</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="formInput mb-5">
+                                            <label for="email" class="form-label text-white-50 ">Old Email ID</label>
+                                            <input type="email" name="email" id="emailConfirm"
+                                                class="form-control text-light bg-dark border-0 border-bottom border-info"
+                                                required>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Please enter a valid email ID
+                                            </div>
+                                        </div>
+                                        <div class="formInput mb-5">
+                                            <label for="password" class="form-label text-white-50">Enter
+                                                Password</label>
+                                            <input type="password" name="password" id="pwdConfirm"
+                                                class="form-control text-light bg-dark border-0 border-bottom border-info"
+                                                required>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Please enter a valid password
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-success" id="btnChangeEmail">Change
+                                        Email</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+                        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+                        crossorigin="anonymous"></script>
+                    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+                    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+                    <script src="<%=devEnv%>__/firebase/init.js"></script>
+                    <script>
+                        const nameField = document.querySelector('#name')
+                        const emailField = document.querySelector('#email')
+                        const numberField = document.querySelector('#number')
+                        const photoField = document.querySelector('.img img')
+
+
+                        async function promptForCredentials(user) {
+                            var myModal = new bootstrap.Modal(document.getElementById('myModal'))
+                            myModal.show()
+
+                            try {
+                                document.getElementById('btnChangeEmail').addEventListener('click', async () => {
+                                    const userCredential = firebase.auth.EmailAuthProvider.credential(
+                                        document.getElementById('emailConfirm').value,
+                                        document.getElementById('pwdConfirm').value
+                                    );
+                                    await user.reauthenticateWithCredential(userCredential)
+                                    await user.updateEmail(emailField.value)
+                                    document.querySelector('form').submit()
+                                })
+                            }
+                            catch (error) {
+                                feedbackDiv.style.display = 'inline'
+                                feedbackDiv.innerText = error.message
+                            };
+                        }
+
+                        document.querySelector('#btnSave').addEventListener('click', async () => {
+                            event.preventDefault()
+                            event.stopPropagation()
+                            try {
+                                const user = firebase.auth().currentUser;
+                                await user.updateProfile({
+                                    displayName: nameField.value,
+                                })
+                                //to change email  
+                                if (emailField.value !== user.email)
+                                    promptForCredentials(user);
+                                else document.querySelector('form').submit()
+                            } catch (error) {
+                                console.log(error)
+                            }
+                        })
+
+                        document.querySelector('#btnPwdReset').addEventListener('click', () => {
+                            const auth = firebase.auth();
+                            auth.sendPasswordResetEmail(auth.currentUser.email)
+                                .then(() => {
+                                    // Password reset email sent!
+                                    // ..
+                                    document.querySelector('#resetPrompt').hidden = false
+                                })
+                                .catch((error) => {
+                                    const errorCode = error.code;
+                                    const errorMessage = error.message;
+                                    // ..
+                                });
+                        })
+
+                        firebase.auth().onAuthStateChanged(user => {
+                            if (!user) {
+                               window.location= '<%=devFun%>'
+                            } else {
+                                document.querySelector('#profilePic').src = user.photoURL
+                            }
+                        })
+
+                    </script>

@@ -1,0 +1,131 @@
+<% layout('/template/adminBoilerplate') -%>
+
+                   <%  if(sampleOrder=='0') {%> 
+                         <h4 class="text-center mt-5">Add the first sample video</h4>
+                    <% } else { %> 
+                         <h4 class="text-center mt-5">Adding after sample video <%= sampleOrder %> </h4> 
+                    <% } %> 
+                <div class="container p-5">
+                    <form action="<%= devFun %>/adminAddSampleVideo/<%= uid %>/<%= courseID %>/<%= parseInt(sampleOrder)+1 %>" method="post" class="row" id="addSampleForm">
+                        <div class="col-lg-6">
+                            <div class="mb-5">
+                                <label for="sampleName" class="form-label">Sample video name</label>
+                                <input type="text"
+                                    class="form-control text-light bg-transparent border-0 border-bottom border-info"
+                                    id="sampleName" name="sampleName">
+                            </div>
+                            <div class="mb-5">
+                                <label for="sampleURL" class="form-label">Video URL (Please ensure it is a vimeo URL to avoid errors)</label>
+                                <input type="text"
+                                    class="form-control text-light bg-transparent border-0 border-bottom border-info"
+                                    id="sampleURL" name="sampleURL">
+                            </div>
+                            <div class="mb-5">
+                                <label for="sampleDescription" class="form-label">Sample Video Description</label>
+                                <textarea class="form-control text-light bg-transparent border border-info"
+                                    id="sampleDescription" name="sampleDescription" rows="5"></textarea>
+                            </div>
+                            <div class="mb-5 d-flex justify-content-center">
+                                <label class="btn btn-info" id="btnUpload">Upload
+                                    video
+                                    thumbnail
+                                    <input type="file" id="inputUpload" hidden>
+                                </label>
+                            </div>
+                          
+                        </div>
+                        <div class="col-lg-6 ps-5 pt-2 d-flex flex-column justify-content-center">
+                            <div class="mb-5">
+                                <img src="" alt="" class="thumbnail" style="width:100%; height: 100%; object-fit: contain;" hidden>
+                            </div>
+                            <div class="mt-2 text-center" id="progressBar"></div>
+                            
+                        </div>
+                        <div class="row buttons d-flex flex-column align-items-center">
+                            <button type="submit" class=" btn btn-primary  w-25">Save
+                                Sample Video</button>
+                            <a type="button" style="width:fit-content" class="btn btn-danger mt-3" href="<%= devFun %>/adminAllSamples/<%= uid %>/<%= courseID %>">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+                <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+                <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+                <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+                <script src="<%=prodEnv%>__/firebase/init.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/uuid@latest/dist/umd/uuidv4.min.js"></script>
+                <script>
+                    var storage = firebase.storage();
+                    const form = document.querySelector('#addSampleForm')
+                    const btnUpload = document.querySelector('#btnUpload')
+                    const inputUpload = document.querySelector('#inputUpload')
+                    const thumbnailImg = document.querySelector('.thumbnail')
+                    // const imageID = parseInt('<%#= sampleID %>')+1
+                    // const sampleID = imageID
+                    const imageID = uuidv4()
+                    const sampleID = imageID
+                    const courseID = '<%= courseID %>'
+                    const defaultPicURL = 'https://firebasestorage.googleapis.com/v0/b/nubefilmacademysite.appspot.com/o/defaultCoursePic%2FcourseThumb.png?alt=media&token=90de2b98-2454-4f77-8ef8-5017b60f7926'
+        
+                    btnUpload.addEventListener('change', () => {
+                        thumbnailImg.hidden = false
+                        thumbnailImg.src =  URL.createObjectURL(inputUpload.files[0])
+                    })
+        
+                    async function uploadImage(imagesRef) {
+                            const file = inputUpload.files[0]
+                            if(file)
+                            {
+                                const uploadTask = imagesRef.put(file)
+                                uploadTask.on('state_changed', 
+                                (snapshot) => {
+                                    // Observe state change events such as progress, pause, and resume
+                                    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                                    var progress = parseInt((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                                    document.querySelector('#progressBar').innerText = 'Upload is ' + progress + '% done. Please wait.'
+                                }, 
+                                (error) => {
+                                    // Handle unsuccessful uploads
+                                    console.log('Error uploading image')
+                                    console.log(error)
+                                    submitForm(defaultPicURL)
+                                }, 
+                                () => {
+                                    // Handle successful uploads on complete
+                                    // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                                    uploadTask.snapshot.ref.getDownloadURL().then((downloadurl) => {
+                                        submitForm(downloadurl)
+                                    });
+                                }
+                                );
+                            }
+                            else{
+                                submitForm(defaultPicURL)
+                            }
+                    }
+        
+                    function submitForm(downloadURL) {
+                        const imageInput = document.createElement('input')
+                        imageInput.value = downloadURL
+                        imageInput.name = 'thumbnailURL'
+                        imageInput.hidden = true
+                        form.append(imageInput)
+                        const inputImageID = document.createElement('input')
+                        inputImageID.value = imageID
+                        inputImageID.name = 'thumbnailID'
+                        inputImageID.hidden = true
+                        form.append(inputImageID)
+                        const inputSampleID = document.createElement('input')
+                        inputSampleID.value = sampleID
+                        inputSampleID.name = 'sampleID'
+                        inputSampleID.hidden = true
+                        form.append(inputSampleID)
+                        form.submit()
+                    }
+        
+                    form.addEventListener('submit', (event) => {
+                        event.preventDefault()
+                        event.stopPropagation()
+                        var imagesRef = storage.ref().child('samples/' + courseID + '/' + imageID);
+                        uploadImage(imagesRef)
+                    })
+                </script>

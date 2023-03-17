@@ -1,0 +1,52 @@
+<% layout('/template/boilerplate') -%>
+ 
+
+                    <div class="getInTouchContainer">
+                        <div class="pageHead">
+                            <h3>Get in touch</h3>
+                            <form action="<%= devFun %>/getInTouch " method="post" class="needs-validation" novalidate>
+                                <div class="formInput mb-5">
+                                    <label for="name" class="form-label text-white-50">Name</label>
+                                    <input type="text" name="name" id="name" class="form-control text-light" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please enter your name
+                                    </div>
+                                </div>
+                                <div class="formInput mb-5">
+                                    <label for="emailclass=" class='form-label text-white-50'>Email ID</label>
+                                    <input type="email" name="email" id="email" class="form-control text-light"
+                                        required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please enter a valid email ID
+                                    </div>
+                                </div>
+                                <div class="formInput mb-5">
+                                    <label for="message" class="form-label text-white-50">Write us a message</label>
+                                    <textarea name="message" id="" rows="5" class="form-control text-light bg-transparent"
+                                        required></textarea>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please enter a valid message
+                                    </div>
+                                </div>
+
+                                <div class="submit">
+                                    <div class="cta">
+                                        <button type="submit">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="img">
+                            <img src="https://images.pexels.com/photos/2832382/pexels-photo-2832382.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                                alt="" srcset="">
+                        </div>
+                    </div>

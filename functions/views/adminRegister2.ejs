@@ -1,0 +1,84 @@
+<% layout('/template/adminBoilerplate') -%>
+ 
+
+                        <h3 class="text-center my-5 text-light">Register</h3>
+                        <div class="container w-25 px-5 my-3">
+                            <form action="<%= devFun %>/adminRegisterFinal " method="post" class="needs-validation"
+                                novalidate>
+                                <div class="formInput mb-5">
+                                    <label for="pwd" class="form-label text-white-50">Password</label>
+                                    <input type="password" name="pwd" id="pwd"
+                                        class="form-control text-light bg-dark border-0 border-bottom border-info"
+                                        required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please enter your password
+                                    </div>
+                                </div>
+                                <div class="formInput mb-5">
+                                    <label for="pwd2" class="form-label text-white-50">Re-enter password</label>
+                                    <input type="password" name="pwd2" id="pwd2"
+                                        class="form-control text-light bg-dark border-0 border-bottom border-info"
+                                        required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please enter your password again
+                                    </div>
+                                </div>
+
+                                <p class="text-center">Already a user? <a href="<%= devFun %>/adminSignIn ">Sign In</a>
+                                </p>
+                                <div class="submit container">
+                                    <div class="cta row">
+                                        <button type="submit col-offset-6" class="btn btn-lg btn-info">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    <script>
+                        const email = '<%= email %>'
+                        const name = '<%= name %>'
+                        const number = '+91<%= number %>'
+                        const adminCode = '<%= adminCode %>'
+                        const form = document.querySelector('form')
+                        const emailInput = document.createElement("input");
+                        emailInput.type = 'text'
+                        emailInput.name = 'email'
+                        emailInput.value = email
+                        emailInput.style.display = 'none'
+
+                        const nameInput = document.createElement("input");
+                        nameInput.type = 'text'
+                        nameInput.name = 'name'
+                        nameInput.value = name
+                        nameInput.style.display = 'none'
+
+                        const numberInput = document.createElement("input");
+                        numberInput.type = 'text'
+                        numberInput.name = 'number'
+                        numberInput.value = number
+                        numberInput.style.display = 'none'
+
+                        const adminCodeInput = document.createElement("input");
+                        adminCodeInput.type = 'text'
+                        adminCodeInput.name = 'adminCode'
+                        adminCodeInput.value = adminCode
+                        adminCodeInput.style.display = 'none'
+
+                        form.addEventListener('submit', function (event) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                            form.append(emailInput)
+                            form.append(nameInput)
+                            form.append(numberInput)
+                            form.append(adminCodeInput)
+                            form.submit()
+                        })
+
+
+                    </script>

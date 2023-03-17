@@ -1,0 +1,37 @@
+<% layout('/template/adminBoilerplate') -%>
+
+    <div class="container my-5">
+        <h3 class="text-center">Internship</h3>
+        <form action="<%=devFun%>/adminNewInternship/<%= uid %> " method="post" class="row">
+            <div class="col-2 col-lg-4"></div>
+            <div class="col-8 col-lg-4 my-5">
+                <div class="mb-5 row ">
+                    <label for="internshipRole" class="form-label">Internship Role</label>
+                    <input type="text" class="form-control text-light bg-transparent border-0 border-bottom border-info"
+                        id="internshipRole" name="internshipRole">
+                </div>
+                <div class="mb-5 row ">
+                    <label for="internshipDuration" class="form-label">Duration</label>
+                    <input type="text" class="form-control text-light bg-transparent border-0 border-bottom border-info"
+                        id="internshipDuration" name="internshipDuration">
+                </div>
+                <div class="mb-5 row ">
+                    <label for="internshipCity" class="form-label">City</label>
+                    <input type="text" class="form-control text-light bg-transparent border-0 border-bottom border-info"
+                        id="internshipCity" name="internshipCity">
+                </div>
+                <div class="mb-5 row ">
+                    <label for="internshipCountry" class="form-label">Country</label>
+                    <input type="text" class="form-control text-light bg-transparent border-0 border-bottom border-info"
+                        id="internshipCountry" name="internshipCountry">
+                </div>
+                <div class="row d-flex justify-content-center mt-5">
+                    <button type="submit" class="btn btn-info w-50">Save and Exit</button>
+                </div>
+
+            </div>
+            <div class=" col-2 col-lg-4"></div>
+
+        </form>
+
+    </div>

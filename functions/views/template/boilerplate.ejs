@@ -1,0 +1,241 @@
+<!-- //This file is responsible for templating the standard components for the entire client-facing website. 
+//Most of the scripts and links are loaded here -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="<%=devEnv%>/favicon.ico" />
+<!-- //EJS tags are used throughout the application to fetch data from the server side. 
+//DevEnv, DevFun, ProdEnv and ProdFun are global environment variables defined at serverside. -->
+    <link rel="stylesheet" href="<%=devEnv%>assets/vendor/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="<%=devEnv%>/assets/vendor/owlCarousel/owl.carousel.min.css">
+    <link rel="stylesheet" href="<%=devEnv%>/assets/vendor/owlCarousel/owl.theme.default.min.css">
+    <script src="https://kit.fontawesome.com/32caa73f09.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="<%=devEnv%>/assets/css/style3.css">
+    <title>NFA</title>
+</head>
+
+<body>
+    <div class="page">
+<!-- //This is the mobile nav -->
+        <nav class="nav">
+
+            <div class="nav__close"></div>
+
+            <ul class="nav__list">
+
+                <div>
+                    <img src="<%=devEnv%>assets/img/whiteLogo.png" class="img-fluid mb-5" alt="" srcset="" width="80px">
+                </div>
+
+                <li class="nav__item multi"> <a class="nav__link" href="<%= devFun %>/">Home</a>
+                </li>
+                <li class="nav__item multi"> <a class="nav__link">Courses</a>
+                    <ul class="nav__list " style="display: none;" id="courseList">
+                    
+                    </ul>
+                </li>
+                <li class="nav__item multi"> <a class="nav__link">About</a>
+                    <ul class="nav__list" style="display: none;">
+                        <li class="sub"><a class="nav__link" href="<%= devFun %>/about">Nube</a></li>
+                        <li class="sub"><a class="nav__link" href="<%= devFun %>/navin">Navin Shetty</a></li>
+                        <li class="sub"><a class="nav__link" href="<%= devFun %>/getInTouch">Get in Touch</a></li>
+                    </ul>
+                </li>
+
+
+                <li class="nav__item multi"> <a class="nav__link">Careers </a>
+                    <ul class="nav__list" style="display: none;">
+                        <li class="sub"><a class="nav__link" href="<%= devFun %>/internships">Internship</a></li>
+                        <li class="sub"><a class="nav__link" href="<%= devFun %>/jobs">Job</a></li>
+                    </ul>
+                </li>
+
+                <!-- If not signed in -->
+                <li class="nav__item"> <a class="nav__link signInBtn" href="<%= devFun %>/signIn">Sign in</a> </li>
+                <!-- If signed in -->
+                <li class="nav__item multi profileStuff">
+                    <a class="nav__link"><img
+                            src="https://t4.ftcdn.net/jpg/02/97/24/51/360_F_297245133_gBPfK0h10UM3y7vfoEiBC3ZXt559KZar.jpg"
+                            alt="" class="profilePic"></a>
+                    <ul class="nav__list " style="display: none;">
+
+                        <li class="sub"><a class="nav__link profileLink" href="<%= devFun %>/Profile">Profile</a></li>
+                        <li class="sub"><a class="nav__link profileLink" href="<%= devFun %>/Cart">Cart</a></li>
+                        <li class="sub"><a class="nav__link profileLink" href="<%= devFun %>/myCourses">My
+                                Courses</a></li>
+                        <li class="sub"><a class="nav__link signOutBtn" href="<%= devFun %>/signOut">Sign Out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <div class="page__content">
+            <div class="nav-open-btn">
+                <div class="nav-open-btn__bar"></div>
+                <div class="nav-open-btn__bar"></div>
+                <div class="nav-open-btn__bar"></div>
+            </div>
+            <div class="content">
+<!-- This is the desktop nav -->
+                <div class="stickHead">
+                    <a href="<%=devFun%>/ " style="text-align: left;">
+                        <div class="head">
+                            <div>
+                                <img src="<%=devEnv%>assets/img/whiteLogo.png" class="img-fluid" width="80px" alt=""
+                                    srcset="">
+                            </div>
+
+                        </div>
+                    </a>
+
+                    <div class="menuItems">
+                        <div class="dropdown">
+                            <a class="dropbtn">Courses</a>
+                            <div class="dropdown-content" id="courseListWeb">
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <a class="dropbtn">About</a>
+                            <div class="dropdown-content">
+                                <a href="<%= devFun %>/about">Nube</a>
+                                <a href="<%= devFun %>/navin">Navin Shetty</a>
+                                <a href="<%= devFun %>/getInTouch">Get in Touch</a>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <a class="dropbtn">Careers</a>
+                            <div class="dropdown-content">
+                                <a href="<%= devFun %>/internships">Internships</a>
+                                <a href="<%= devFun %>/jobs">Jobs</a>
+                            </div>
+                        </div>
+                        <a href="<%= devFun %>/signIn" class="signInBtn">Sign in</a>
+                        <div class="dropdown profileStuff">
+                            <a class="dropbtn "><img
+                                    src="https://firebasestorage.googleapis.com/v0/b/nubefilmacademysite.appspot.com/o/profilePictures%2FdefaultProfile.png?alt=media&token=35e63948-1c4f-4035-9a42-1a3dd850ab8f"
+                                    alt="" class="profilePic"></a>
+                            <div class="dropdown-content ">
+                                <a class='profileLink' href="<%= devFun %>/profile">Profile</a>
+                                <a class='profileLink' href="<%= devFun %>/cart">Cart</a>
+                                <a class='profileLink' href="<%= devFun %>/myCourses">My Courses</a>
+                                <a class="signOutBtn" href="<%= devFun %>/signOut">Sign Out</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+
+                        <%- body -%>
+                            <div class="footer">
+                                <div class="textLinks">
+                                    <a href="<%= devFun %>/#testimonialSection">Testimonials</a>
+                                    <a href="<%= devFun %>/#workSection">Work with us</a>
+                                    <a href="<%= devFun %>/#aboutSection">About Us</a>
+                                    <a href="<%= devFun %>/getInTouch">Get in touch</a>
+                                    <a href="<%= devFun %>/faq">FAQ</a>
+                                </div>
+                                <div class="textLinks policies">
+                                    <a href="<%= devFun %>/#aboutSection">Privacy Policy</a>
+                                    <a href="<%= devFun %>/getInTouch">Terms & Conditions</a>
+                                    <a href="<%= devFun %>/faq">Refund/Cancellation Policy</a>
+                                </div>
+                                <div class="socialLinks">
+                                    <i class="fab fa-instagram"></i>
+                                    <i class="fab fa-twitter"></i>
+                                    <i class="fab fa-linkedin-in"></i>
+                                    <i class="fab fa-facebook"></i>
+                                </div>
+                            </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="<%=devEnv%>assets/vendor/jquery/jquery.min.js"></script>
+<script src="<%=devEnv%>assets/vendor/owlCarousel/owl.carousel.min.js"></script>
+<script src="<%=devEnv%>assets/js/index.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="<%=devEnv%>__/firebase/init.js"></script>
+<script>
+//Check firebase auth reference to understand this method
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            //showing components once signed in
+            Array.from(document.querySelectorAll('.signInBtn')).forEach(function (element) {
+                element.style.display = 'none'
+            })
+            Array.from(document.querySelectorAll('.profileStuff')).forEach(function (element) {
+                element.style.display = 'inline-block'
+            })
+            Array.from(document.querySelectorAll('.profileLink')).forEach(function (link) {
+                link.href = link.href.concat('/', user.uid)
+                //"?user=", 
+            })
+            document.querySelectorAll('.profilePic').forEach(function (img) {
+                img.src = user.photoURL
+            })
+
+//If user is admin
+            user.getIdTokenResult()
+                .then((idTokenResult) => {
+                    if (!!idTokenResult.claims.admin) {
+                        window.location = "<%=devFun%>/adminConsole/" + user.uid
+                        // Array.from(document.querySelectorAll('.profileStuff')).forEach(function (element) {
+                        //     element.style.display = 'none'
+                        // })
+                    }
+                }).catch((error) => {
+                    console.log(error);
+                });
+
+        }
+        else {
+            Array.from(document.querySelectorAll('.signInBtn')).forEach(function (element) {
+                element.style.display = 'inline-block'
+            })
+            Array.from(document.querySelectorAll('.profileStuff')).forEach(function (element) {
+                element.style.display = 'none'
+            })
+        }
+    });
+//fetching courses dynamically from front end using client side web firestore
+    const loadCourses = async () => {
+        const courseListMobile = document.querySelector('#courseList')
+       const courseListWeb = document.querySelector('#courseListWeb')
+        const db = firebase.firestore();
+        var docRef = await db.collection("courses");
+
+        docRef.get().then((querySnapshot) => {
+            querySnapshot.forEach((course) => {
+                const li = document.createElement('li')
+                li.classList.add('sub')
+                
+                const a1 = document.createElement('a')
+                a1.classList.add('nav__link')
+                a1.href = '<%= devFun %>/courseModules/'+course.id
+                a1.innerText = course.data().courseName
+                const a2 = document.createElement('a')
+                a2.classList.add('nav__link')
+                a2.href = '<%= devFun %>/courseModules/'+course.id
+                a2.innerText = course.data().courseName
+
+                li.appendChild(a1)
+                courseListMobile.appendChild(li)
+                courseListWeb.appendChild(a2)
+            });
+        }).catch((error) => {
+            console.log("Error getting document:", error);
+        });
+    }
+
+
+    loadCourses()
+
+</script>
+
+</html>

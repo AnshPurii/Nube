@@ -1,0 +1,32 @@
+<% layout('/template/boilerplate') -%>
+ 
+                    <div class="signOutContainer">
+                        <div class="signOutQuote">
+                            <div class="quote">“The greatest enemy of knowledge is not ignorance, it is the illusion of
+                                knowledge”</div>
+                            <div class="author">- Stephen Hawking</div>
+                        </div>
+                        <div class="signOutModal">
+                            <div class="confirmationText">
+                                <div class="conText">Are you sure you want to sign out?</div>
+                            </div>
+                            <div class="signOutButtons">
+                                <a href="" class="signOutButton cancel">
+                                    <div class="cancelBtn">Cancel</div>
+                                </a>
+                                <a href="" class="signOutButton" id="signOutBtn">
+                                    <div>Sign Out</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+                    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+                    <script src="<%=devEnv%>__/firebase/init.js"></script>
+                    <script src="<%= devEnv %>assets/js/auth.js "></script>
+                    <script>
+                        const redirect = '<%=devFun%>'
+                        document.querySelector('#signOutBtn').addEventListener('click', () => {
+                            signOut()
+                        })
+                    </script>

@@ -1,0 +1,40 @@
+<% layout('/template/adminBoilerplate') -%>
+ 
+      
+                    <div class="container my-5 ">
+                        <div class="row d-flex flex-row justify-content-between mt-5 mx-2">
+                            <div class="col-lg-10 col-6 ps-5">
+                                <h3>Courses</h3>
+                            </div>
+                            <a class="btn btn-info col-lg-2 col-6" href="<%=devFun%>/adminNewCourse/<%= uid %>">
+                                Add
+                                Course
+                            </a>
+                        </div>
+                        <% courses.forEach(course => { %>
+                        <div class="row  border-0 border-bottom border-info p-5">
+                            <div class="col-12 col-lg-3 d-flex flex-column justify-content-center">
+                                <div class="thumbnail"> <img class="img-fluid"
+                                        src="  <%= course.data().thumbnailURL %> "
+                                        alt=""></div>
+                            </div>
+                            <div class="col-12 col-lg-9 d-flex flex-column justify-content-between align-items-start ps-5 py-2">
+                                    <div class="row fs-3">
+                                        <div class="row"><%= course.data().courseName %> </div>
+                                        <div class="row text-white-50 fs-6"> <%= course.data().instructorName %>  | Duration: <%=durationUnit( course.data().duration )%></div>
+                                    </div>
+                                    <div class="row mt-5">
+                                        <a class="btn btn-primary me-3" style="width: fit-content;"
+                                            href="<%=devFun%>/adminEditCourse/<%= uid %>/<%= course.id %> ">
+                                           Course Details</a>
+                                        <a class="btn btn-success" style="width: fit-content;"
+                                            href="<%=devFun%>/adminAllModules/<%= uid %>/<%= course.id %> ">
+                                            Modules</a>
+                                        <a class="btn btn-warning ms-3" style="width: fit-content;"
+                                            href="<%=devFun%>/adminAllSampleVideos/<%= uid %>/<%= course.id %> ">
+                                            Sample Videos</a>
+                                    </div>
+                            </div>
+                        </div>
+                        <%  }); %>
+                    </div>

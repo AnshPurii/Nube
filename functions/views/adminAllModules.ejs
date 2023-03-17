@@ -1,0 +1,351 @@
+<% layout('/template/adminBoilerplate') -%>
+
+    <div class="container my-5 page">
+        <div class="row d-flex flex-row justify-content-between mt-5 mx-2">
+            <h3 class="text-center"> <%= course.data().courseName  %></h3>
+            <h5 class="text-center">Modules and Lectures</h5>
+        </div>
+        <% if(course.data().numModules===0) { %>
+        <div class="row d-flex justify-content-center mt-5">
+            <a class="btn btn-info mt-3 btnAddModule" style="width: fit-content;" href="<%= devFun %>/adminAddModule/<%= uid %>/<%= course.id %>/0">
+                <button class="btn btn-info" style="width: fit-content;">Add the first module</button>
+            </a>
+        </div>
+        <% } %>
+
+        <% modules.forEach((module) => { %> 
+            <div class="row module ms-5">
+                <div
+                    class="row  mt-5 p-4 d-flex justify-content-between align-items-center border border-white">
+                    <div class="moduleDetails col-12 col-lg-8">
+                        <div>
+                        <p class=" m-0 p-0"> Module <%=module.data().moduleOrder%> </p>
+                            <p class="m-0 p-0 fs-4"><%=module.data().moduleName%></p>
+                        </div>
+                        <div class=" fs-6 text-white-50"><%=module.data().numLectures%> Lectures |
+                            Duration : <%=durationUnit(module.data().duration)%> </div>
+                    </div>
+                    <div class="col-12 col-lg-4 d-flex flex-column align-items-end">
+                        <a class="btn btn-info " style="width: fit-content;" href="<%= devFun %>/adminEditModule/<%= uid %>/<%= course.id %>/<%= module.id %>">
+                            <i class="fas fa-pen "></i>
+                        </a>
+                        <a class="btn btn-info mt-3 " style="width: fit-content;" href="<%= devFun %>/adminAddModule/<%= uid %>/<%= course.id %>/<%= module.data().moduleOrder %> ">
+                            <i class="fas fa-plus "></i>
+                        </a>
+                    </div>
+                </div>
+                <% if(module.data().numLectures===0) { %>
+                    <div class="row d-flex justify-content-center mt-2">
+                        <a class="btn btn-info mt-3 " style="width: fit-content;" href="<%= devFun %>/adminAddLecture/<%= uid %>/<%= course.id %>/<%= module.id %>/0">
+                            <button class="btn btn-info" style="width: fit-content;">Add the first lecture for this module</button>
+                        </a>
+                    </div>
+                <% } %>
+                <% lectures.forEach((lecture) => { %> 
+                    <%   if(lecture.data().moduleID === module.id){ %>
+                        <div class="row p-5 lecture">
+                            <div class="col-12 col-lg-3 d-flex align-items-center ">
+                                <div class="thumbnail border border-info p-2"> 
+                                    <img class="img-fluid" style="object-fit: cover;" src="<%= module.data().thumbnailURL %> " alt="">
+                                </div>
+                            </div>
+                                <div class="col-12 col-lg-9 d-flex justify-content-between align-items-center ps-5 py-2 ">
+                                    <div class="row w-75 d-flex flex-column ">
+                                        <p class="m-0 p-0"> Lecture <%=lecture.data().lectureOrder%></p>
+                                        <p class="fs-5 m-0 p-0"> <%= lecture.data().lectureName %> </p>
+                                        <% if(lecture.data().isTest){ %> 
+                                            <div class="row text-white-50 fs-6">Test </div>
+                                        <% } else {%> 
+                                        <div class="row text-white-50 fs-6">Duration : <%= durationUnit(lecture.data().duration) %> 
+                                        </div>
+                                        <% } %> 
+                                    </div>
+        
+                                    <div class="d-flex flex-column">
+                                        <a class="btn btn-primary btnEditLecture" href="<%= devFun %>/adminEditLecture/<%= uid %>/<%= course.id %>/<%= module.id %>/<%=lecture.id%>" style="width: fit-content;">
+                                            <i class="fas fa-pen"></i>
+                                        </a>
+                                        <a class="btn btn-primary mt-3 btnAddLecture" href="<%= devFun %>/adminAddLecture/<%= uid %>/<%= course.id %>/<%= module.id %>/<%=lecture.data().lectureOrder%>"
+                                            style="width: fit-content;"">
+                                            <i class=" fas fa-plus "></i>
+                                        </a>
+                                        <a class="btn btn-primary mt-3 btnAddTest"  href="<%= devFun %>/adminAddTest/<%= uid %>/<%= course.id %>/<%= module.id %>/<%=lecture.data().lectureOrder%>"
+                                            style="width: fit-content;">
+                                            <i class="fas fa-file-alt"></i>
+                                        </a>
+                                    </div>
+                              
+                                </div>
+                        </div>
+                    <% } %>  
+                <% }) %> 
+             
+            </div>
+        <% });  %>
+      
+            <div class=" row w-100 my-5 ">
+                <nav aria-label=" breadcrumb">
+                    <ol class="breadcrumb d-flex justify-content-center">
+                        <li class="breadcrumb-item"><a
+                                href="<%= devFun %>/adminAllCourses/<%=uid%>">Courses</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            <%= course.data().courseName  %>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+
+        // const expand = function(element, moduleDiv, parentDiv, url, action) {
+        //     var toggleDetails = true;
+        //     const resultDiv = document.createElement('div')
+        //     element.addEventListener('click', () => {
+        //         if (toggleDetails) {
+        //             axios.get(url)
+        //                 .then(function (response) {
+        //                     // handle success
+        //                     resultDiv.innerHTML = response.data
+        //                 })
+        //                 .catch(function (error) {
+        //                     // handle error
+        //                     console.log(error);
+        //                 })
+        //                 .then(function () {
+        //                     // always executed
+        //                 });
+        //             element.classList.remove('btn-primary')
+        //             element.classList.add('btn-warning')
+        //             element.innerHTML = ' <i class="fas fa-minus "></i>'
+        //         }
+        //         else {
+        //             resultDiv.innerHTML = ''
+        //             element.classList.remove('btn-warning')
+        //             element.classList.add('btn-primary')
+        //             if(action==='add')
+        //             element.innerHTML = ' <i class="fas fa-plus "></i>'
+        //             else if(action==='edit')
+        //             element.innerHTML = ' <i class="fas fa-pen "></i>'
+        //             else element.innerHTML = ' <i class="fas fa-file-alt "></i>'
+        //         }
+        //             parentDiv.appendChild(resultDiv)
+        //             toggleDetails = !toggleDetails
+        //         })
+        // }
+        
+        // document.querySelectorAll('.btnAddModule').forEach((element) => {
+        //     const moduleDiv = element.parentElement.parentElement.parentElement
+        //     const parentDiv = element.parentElement.parentElement
+        //     const url = '<%#= devFun %>/adminAddModule/<%#= uid %>/<%#= courseID %>/'+moduleDiv.id
+        //     const action = 'add'
+        //     expand(element, moduleDiv, parentDiv, url,action)
+        // })
+        // document.querySelectorAll('.btnEditModule').forEach((element) => {
+        //     const moduleDiv = element.parentElement.parentElement.parentElement
+        //     const parentDiv = element.parentElement.parentElement
+        //     const url = '<%#= devFun %>/adminEditModule/<%#= uid %>/<%#= courseID %>/'+moduleDiv.id
+        //     const action = 'edit'
+        //     expand(element, moduleDiv, parentDiv, url,action)
+        // })
+        // document.querySelectorAll('.btnAddLecture').forEach((element) => {
+        //     const moduleDiv = element.parentElement.parentElement.parentElement.parentElement
+        //     const parentDiv = element.parentElement.parentElement.parentElement
+        //     const url = '<%#= devFun %>/adminAddLecture/<%#= uid %>/<%#= courseID %>/'+ moduleDiv.id + '/' + parentDiv.id
+        //     const action = 'add'
+        //     expand(element, moduleDiv, parentDiv, url,action)
+        // })
+        // document.querySelectorAll('.btnEditLecture').forEach((element) => {
+        //     const moduleDiv = element.parentElement.parentElement.parentElement.parentElement
+        //     const parentDiv = element.parentElement.parentElement.parentElement
+        //     const url = '<%#= devFun %>/adminEditLecture/<%#= uid %>/<%#= courseID %>/'+ moduleDiv.id + '/' + parentDiv.id
+        //     const action = 'edit'
+        //     expand(element, moduleDiv, parentDiv, url,action)
+        // })
+        // document.querySelectorAll('.btnAddTest').forEach((element) => {
+        //     const moduleDiv = element.parentElement.parentElement.parentElement.parentElement
+        //     const parentDiv = element.parentElement.parentElement.parentElement
+        //     const url = '<%#= devFun %>/adminAddTest/<%#= uid %>/<%#= courseID %>/'+ moduleDiv.id + '/' + parentDiv.id
+        //     const action = 'test'
+        //     expand(element, moduleDiv, parentDiv, url,action)
+        // })
+        // document.querySelectorAll('.btnEditTest').forEach((element) => {
+        //     const moduleDiv = element.parentElement.parentElement.parentElement.parentElement
+        //     const parentDiv = element.parentElement.parentElement.parentElement
+        //     const url = '<%#= devFun %>/adminEditTest/<%#= uid %>/<%#= courseID %>/'+ moduleDiv.id + '/' + parentDiv.id
+        //     const action = 'edit'
+        //     expand(element, moduleDiv, parentDiv, url,action)
+        // })
+
+        //  if(!document.querySelectorAll('.module').length){
+        //         axios.get('<%#= devFun %>/adminAddModule/<%#= uid %>/<%#= courseID %>/0')
+        //                 .then(function (response) {
+        //                     // handle success
+        //                     document.querySelector('.page').innerHTML =  response.data
+        //                 })
+        //                 .catch(function (error) {
+        //                     // handle error
+        //                     console.log(error);
+        //                 })
+        //                 .then(function () {
+        //                     // always executed
+        //                 });
+        //  }
+
+        //  if(!document.querySelectorAll('.lecture').length){
+        //         axios.get('<%#= devFun %>/adminAddLecture/<%#= uid %>/<%#= courseID %>/'+ document.querySelector('.module').id+'/0')
+        //                 .then(function (response) {
+        //                     // handle success
+        //                     const resultDiv = document.createElement('div')
+        //                     resultDiv.innerHTML = response.data
+        //                     document.querySelector('.module').appendChild(resultDiv)
+        //                 })
+        //                 .catch(function (error) {
+        //                     // handle error
+        //                     console.log(error);
+        //                 })
+        //                 .then(function () {
+        //                     // always executed
+        //                 });
+        //  }
+
+        // document.querySelectorAll('.btnAddModule').forEach((element) => {
+        //     var toggleDetails = true;
+        //     const resultDiv = document.createElement('div')
+        //     const moduleDiv = element.parentElement.parentElement.parentElement
+        //     const parentDiv = element.parentElement.parentElement
+        //     element.addEventListener('click', () => {
+        //         if (toggleDetails) {
+        //             axios.get('<%#= devFun %>/adminAddModule/<%#= uid %>/<%#= courseID %>/' + moduleDiv.id)
+        //                 .then(function (response) {
+        //                     // handle success
+        //                     resultDiv.innerHTML = response.data
+        //                 })
+        //                 .catch(function (error) {
+        //                     // handle error
+        //                     console.log(error);
+        //                 })
+        //                 .then(function () {
+        //                     // always executed
+        //                 });
+        //             element.classList.remove('btn-primary')
+        //             element.classList.add('btn-warning')
+        //             element.innerHTML = ' <i class="fas fa-minus "></i>'
+        //         }
+        //         else {
+        //             resultDiv.innerHTML = ''
+        //             element.classList.remove('btn-warning')
+        //             element.classList.add('btn-primary')
+        //             element.innerHTML = ' <i class="fas fa-plus "></i>'
+        //         }
+        //         parentDiv.appendChild(resultDiv)
+        //             toggleDetails = !toggleDetails
+        //         })
+        //     })
+        
+       
+        // document.querySelectorAll('.btnEditModule').forEach((element) => {
+        //     var toggleDetails = true;
+        //     const resultDiv = document.createElement('div')
+        //     const moduleDiv = element.parentElement.parentElement.parentElement
+        //     const parentDiv = element.parentElement.parentElement
+        //     element.addEventListener('click', () => {
+        //         if (toggleDetails) {
+        //             axios.get('<%#= devFun %>/adminEditModule/<%#= uid %>/<%#= courseID %>/' + parentDiv.id)
+        //                 .then(function (response) {
+        //                     // handle success
+        //                     resultDiv.innerHTML = response.data
+        //                 })
+        //                 .catch(function (error) {
+        //                     // handle error
+        //                     console.log(error);
+        //                 })
+        //                 .then(function () {
+        //                     // always executed
+        //                 });
+        //             element.classList.remove('btn-primary')
+        //             element.classList.add('btn-warning')
+        //             element.innerHTML = ' <i class="fas fa-minus "></i>'
+        //         }
+        //         else {
+        //             resultDiv.innerHTML = ''
+        //             element.classList.remove('btn-warning')
+        //             element.classList.add('btn-primary')
+        //             element.innerHTML = ' <i class="fas fa-pen "></i>'
+        //         }
+        //         parentDiv.appendChild(resultDiv)
+        //         toggleDetails = !toggleDetails
+
+        //     })
+        // })
+        // document.querySelectorAll('.btnAddLecture').forEach((element) => {
+        //     var toggleDetails = true;
+        //     const resultDiv = document.createElement('div')
+        //     const moduleDiv = element.parentElement.parentElement.parentElement.parentElement
+        //     const parentDiv = element.parentElement.parentElement.parentElement
+        //     element.addEventListener('click', () => {
+        //         if (toggleDetails) {
+        //             axios.get('<%#= devFun %>/adminAddLecture/<%#= uid %>/<%#= courseID %>/' + moduleDiv.id + '/' + parentDiv.id)
+        //                 .then(function (response) {
+        //                     // handle success
+        //                     resultDiv.innerHTML = response.data
+        //                 })
+        //                 .catch(function (error) {
+        //                     // handle error
+        //                     console.log(error);
+        //                 })
+        //                 .then(function () {
+        //                     // always executed
+        //                 });
+        //             element.classList.remove('btn-primary')
+        //             element.classList.add('btn-warning')
+        //             element.innerHTML = '<i class="fas fa-minus "></i>'
+        //         }
+        //         else {
+        //             resultDiv.innerHTML = ''
+        //             element.classList.remove('btn-warning')
+        //             element.classList.add('btn-primary')
+        //             element.innerHTML = ' <i class="fas fa-plus "></i>'
+        //         }
+        //         parentDiv.appendChild(resultDiv)
+        //         toggleDetails = !toggleDetails
+
+        //     })
+        // })
+        // document.querySelectorAll('.btnEditLecture').forEach((element) => {
+        //     var toggleDetails = true;
+        //     const resultDiv = document.createElement('div')
+        //     const moduleDiv = element.parentElement.parentElement.parentElement.parentElement
+        //     const parentDiv = element.parentElement.parentElement.parentElement
+        //     element.addEventListener('click', () => {
+        //         if (toggleDetails) {
+        //             axios.get('<%#= devFun %>/adminEditLecture/<%#= uid %>/<%#= courseID %>/' + moduleDiv.id + '/' + parentDiv.id)
+        //                 .then(function (response) {
+        //                     // handle success
+        //                     resultDiv.innerHTML = response.data
+        //                 })
+        //                 .catch(function (error) {
+        //                     // handle error
+        //                     console.log(error);
+        //                 })
+        //                 .then(function () {
+        //                     // always executed
+        //                 });
+        //             element.classList.remove('btn-primary')
+        //             element.classList.add('btn-warning')
+        //             element.innerHTML = ' <i class="fas fa-minus "></i>'
+        //         }
+        //         else {
+        //             resultDiv.innerHTML = ''
+        //             element.classList.remove('btn-warning')
+        //             element.classList.add('btn-primary')
+        //             element.innerHTML = ' <i class="fas fa-pen "></i>'
+        //         }
+        //         parentDiv.appendChild(resultDiv)
+        //         toggleDetails = !toggleDetails
+
+        //     })
+        // })
+    </script>

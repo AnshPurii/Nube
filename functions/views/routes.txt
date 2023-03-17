@@ -1,0 +1,76 @@
+Pages: {
+    Public: {
+        GET /About About,
+        GET /Navin Navin,
+        GET /CourseModules/:courseID CourseModules,
+        GET /GetInTouch Get in touch,
+        POST /GetInTouch messageSent,
+        GET /Jobs Jobs,
+        GET /Internships Internships,
+        GET /SignIn SignIn,
+        GET /SignOut SignOut,
+        GET /Register Register,
+        POST /Register Register2,
+        GET /Home Home
+        GET * Error
+        GET /FAQ FAQ
+    }
+
+    Private: {
+       GET /MyCourses/:uid MyCourses,
+       GET /CoursePage/:courseID CoursePage,
+       GET /Profile/:uid Edit Profile Page,
+       GET /editProfilePic/:uid Edit ProfilePic Page,
+       GET /Cart/:uid Cart,
+    }
+
+    Admin: {
+        Register,
+        Register2,
+        SignIn,
+        AllJobs,
+        NewJob,
+        EditJob
+        AllInternships,
+        NewInternship,
+        EditInternship
+        AllTestimonials,
+        NewTestimonial,
+        EditTestimonial,
+        AllCourses,
+        NewCourse,
+        AllModules,
+        NewModule,
+        EditModule,
+        NewLecture,
+        EditLecture,
+        NewTest,
+        EditTest,
+        AllSampleVideos,
+        NewSampleVideos,
+        EditSampleVideos,
+        AllStudents,
+        StudentDetails,
+    }
+}
+
+rzp_live_PdEttfm57UdWhH
+8b6khMVOsX6PIVtCEkGfXeyr
+,
+  "emulators": {
+
+    "hosting": {
+      "port": 5000,
+      "host": "localhost"
+    }
+  }
+
+case 1: delModule.order < maxOrder
+        get every module with order > delModule.order 
+        reduce their order by 1
+
+case 2: delModule.order > maxOrder
+        not possible
+
+case 3: delModule.order = maxOrder
+        do nothing

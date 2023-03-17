@@ -1,0 +1,40 @@
+<% layout('/template/adminBoilerplate') -%>
+ 
+
+                    <div class="container my-5">
+                        <div class="row d-flex flex-row justify-content-between my-5">
+                            <div class="col-lg-10 col-6">
+                                <h3>Internships</h3>
+                            </div>
+                            <a class="btn btn-info col-lg-2 col-6" href="<%=devFun%>/adminNewInternship/<%= uid %> ">
+                                Add Internship
+                            </a>
+                        </div>
+                        <div class="row internships border-0 border-bottom border-info d-flex justify-content-between">
+                            <%  internships.forEach(internship => { %> 
+                            <div class="col-lg-5 internship">
+                                <div class="row">
+                                        <div class="col-lg-8 col-12  my-2 p-5">
+                                            <h5 class="row ">
+                                                <div class=""><%= internship.data().internshipRole %></div>
+                                            </h5>
+                                            <div class="row mt-4">
+                                                <div class="">Duration : <%= internship.data().internshipDuration %></div>
+                                                <div class=""><%= internship.data().internshipCity %>, <%= internship.data().internshipCountry %></div>
+                                            </div>
+                                            <div class="row mt-4">
+                                                <% const date = internship.data().postTime %> 
+                                                <div class="text-white-50">Posted : <%=date.toDate().toDateString()%> </div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="col-lg-4 col-12 p-lg-5 my-2 p-3 d-flex justify-content-center align-items-center">
+                                            <a class="change "
+                                                href="<%=devFun%>/adminEditInternship/<%= uid %>/<%= internship.id %>"><i
+                                                    class="fs-3 fas fa-pen"></i></a>
+                                        </div>
+                                </div>
+                            </div>
+                            <% }) %> 
+                        </div>
+                    </div>

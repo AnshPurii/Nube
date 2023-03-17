@@ -1,0 +1,34 @@
+<% layout('/template/adminBoilerplate') -%>
+
+            <%  if(prevLecOrder=='0') {%> 
+                <h4 class="text-center mt-5">Add the first Lecture
+           <% } else { %> 
+                    <h4 class="text-center mt-5">Adding after lecture <%= prevLecOrder %> 
+           <% } %> 
+                </h4>
+                <div class="container p-5 ">
+                    <form action="<%= devFun %>/adminAddLecture/<%= uid %>/<%= courseID %>/<%= moduleID %>/<%= parseInt(prevLecOrder)+1 %>" method="post" class="row">
+                        <div class="mb-5">
+                            <label for="lectureName" class="form-label">Lecture name</label>
+                            <input type="text"
+                                class="form-control text-light bg-transparent border-0 border-bottom border-info"
+                                id="lectureName" name="lectureName">
+                        </div>
+                        <div class="mb-5">
+                            <label for="lectureDescription" class="form-label">Lecture Description</label>
+                            <textarea class="form-control text-light bg-transparent border border-info"
+                                id="lectureDescription" name="lectureDescription" rows="10"></textarea>
+                        </div>
+                        <div class="mb-5">
+                            <label for="lecVidURL" class="form-label">Lecture video link (Please ensure it's a vimeo link to avoid errors)</label>
+                            <input type="text"
+                                class="form-control text-light bg-transparent border-0 border-bottom border-info"
+                                id="lecVidURL" name="lecVidURL">
+                        </div>
+                        <div class="row buttons d-flex flex-column align-items-center">
+                            <button type="submit" class=" btn btn-primary  w-25">Save
+                                Lecture</button>
+                            <a type="button" style="width:fit-content" class="btn btn-danger mt-3"  href="<%= devFun %>/adminAllModules/<%= uid %>/<%= courseID %>">Cancel</a>
+                        </div>
+                    </form>
+                </div> 

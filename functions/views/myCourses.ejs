@@ -1,0 +1,53 @@
+<% layout('/template/boilerplate') -%>
+ 
+                        <h3 style="margin-top: 180px; text-align: center;">My Courses</h3>
+
+                        <div class="courseList ">
+                            <% if(typeof(courses)!='undefined'){ %> 
+                            <% courses.forEach(course => { %> 
+                            <div class="item">
+                                <a class="courseLink" href=" <%= devFun %>/coursePage/<%= course.id %>/<%= uid %>  ">
+                                    <div class="thumbnail"> <img
+                                            src="<%= course.data().thumbnailURL%> "
+                                            alt=""></div>
+                                    <div class="completionBar">
+                                        <div class="completedBar" style="width: <%= course.percentCompleted%>%"></div>
+                                    </div>
+                                    <div class="completionText"><span class="percentage"><%= course.percentCompleted%></span>% Completed</div>
+                                    <div class="course-content">
+                                        <div class="language"><%= course.data().courseLanguage%></div>
+                                        <div class="course-title"><%= course.data().courseName%></div>
+                                        <div class="details">
+                                            <div class="instructor-name"><%= course.data().instructorName%></div>
+                                            <div class="duration">Duration : <%= durationUnit(course.data().duration)%></div>
+                                        </div>
+                                        <!-- <div class="description">
+                                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+                                            praesentium
+                                            voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi
+                                            sint
+                                            occae
+                                            At
+                                            vero eos et accusamus et iusto odio dignissimos ducimus.
+                                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+                                            praesentium
+                                            voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi
+                                            sint
+                                            occae
+                                            At
+                                            vero eos et accusamus et iusto odio dignissimos ducimus.
+                                        </div> -->
+                                        <!-- <div class="tags">
+                                            <div class="tag">Bestseller</div>
+                                            <div class="tag">Intermediate</div>
+                                        </div> -->
+                                    </div>
+                                </a>
+                            </div>
+                            <% }) %> 
+                            <% } else {%> 
+                                <h3 class="text-center mt-5 pt-5" style="height: 40vh;">Oops! You have not purchased any courses yet :(</h3> 
+                            <% } %> 
+
+                        </div>
+                    

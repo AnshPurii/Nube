@@ -1,0 +1,463 @@
+<% layout('/template/boilerplate') -%>
+
+
+
+
+    <div class="mainDiv" style="position:relative;">
+        <div style="width: 100vw;  position:relative;" id="player">
+            <i id="playBtn" class="fas fa-play-circle"></i>
+
+        </div>
+        <div class="mainOverlay">
+            <div class="course-content">
+                <div class="language">Language : <%= latestCourse.data().courseLanguage %>
+                </div>
+                <div class="course-title">
+                    <%= latestCourse.data().courseName %>
+                </div>
+                <div class="details">
+                    <div class="instructor-name">
+                        <%= latestCourse.data().instructorName %>
+                    </div>
+                    <div class="duration">Duration : <%= durationUnit(latestCourse.data().duration) %>
+                    </div>
+                </div>
+                <div class="description">
+                    <%= latestCourse.data().courseDescription %>
+                </div>
+                <div class="tags">
+                    <div class="tag" <%if( latestCourse.data().bestsellerTag===null){%>
+                        hidden <% } %>> Bestseller </div>
+                    <div class="tag" <%if( latestCourse.data().beginnerTag===null){%> hidden
+                        <% } %>> Beginner
+                    </div>
+                    <div class="tag" <%if( latestCourse.data().intermediateTag===null){%>
+                        hidden <% } %>> Intermediate </div>
+                </div>
+            </div>
+            <div class="cta">
+                <a class="buyLink"><button>BUY NOW @<%= latestCourse.data().coursePrice-latestCourse.data().discountAmount %>
+                            /-</button></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="courseDiv">
+        <div class="sectionHead">
+            <h3>
+                <%= latestCourse.data().courseName %>
+            </h3>
+            <div class="details">
+                <div class="hours">
+                    <%= durationUnit(latestCourse.data().duration) %>
+                </div>
+                <div class="modules">
+                    <%= latestCourse.data().numModules %> Modules
+                </div>
+                <div class="lecs">
+                    <%= latestCourse.data().numLectures %> Lectures
+                </div>
+            </div>
+        </div>
+        <% modules.forEach(module=> { %>
+            <div class="courseRow">
+                <div class="module">
+                    <div class="moduleHead">
+                        <div class="moduleName">
+                            <%= module.data().moduleOrder %>. <%= module.data().moduleName %>
+                        </div>
+                        <div class="moduleDuration">
+                            <%=durationUnit( module.data().duration) %>
+                        </div>
+                    </div>
+                    <div class="moduleDesc">
+                        <%= module.data().moduleDescription %>
+                    </div>
+                </div>
+                <div class="vids">
+                    <div class="owl-carousel">
+                        <% lectures.forEach((lecture)=> { %>
+                            <% if(lecture.data().moduleID===module.id){ %>
+                                <div class="vid item">
+                                    <div class="thumbnail"> <img src="<%= module.data().thumbnailURL %>" alt=""></div>
+                                    <div class="lecName">
+                                        <%= lecture.data().lectureOrder %>. <%= lecture.data().lectureName %>
+                                    </div>
+                                    <div class="lecDesc">
+                                        <%= lecture.data().lectureDescription %>
+                                    </div>
+                                </div>
+                                <% } %>
+                                    <% }) %>
+                    </div>
+                </div>
+            </div>
+            <% }) %>
+                <div class="cta">
+                    <a href="<%= devFun %>/courseModules/<%= latestCourse.id  %> "><button>View Course
+                            Details</button></a>
+                </div>
+    </div>
+    <div class="teachDiv">
+        <div class="titleTwins">
+            <div class="sectionLeft"></div>
+            <div class="arrow-up"></div>
+            <div class="sectionRight"></div>
+
+            <h3 class="titleLeft">How we teach</h3>
+            <h3 class="titleRight">What you'll learn</h3>
+        </div>
+
+        <div class="titleSmall">
+            <h3>How we teach</h3>
+        </div>
+        <div class="con">
+            <div class="cont">
+                <div class="rowx">
+                    <div class="icon">
+                        <div class="icontainer"><i class="fas fa-school"></i></div>
+                    </div>
+                    <div class="text">At vero eos et accusamus et iusto odio dignissimos
+                        ducimus qui
+                        blanditiis
+                        praesentium voluptatum
+                    </div>
+                </div>
+                <div class="rowx">
+                    <div class="icon">
+                        <div class="icontainer"><i class="fas fa-school"></i></div>
+                    </div>
+                    <div class="text">At vero eos et accusamus et iusto odio dignissimos
+                        ducimus qui
+                        blanditiis
+                        praesentium voluptatum
+                    </div>
+                </div>
+                <div class="rowx">
+                    <div class="icon">
+                        <div class="icontainer"><i class="fas fa-school"></i></div>
+                    </div>
+                    <div class="text">At vero eos et accusamus et iusto odio dignissimos
+                        ducimus qui
+                        blanditiis
+                        praesentium voluptatum
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="titleSmall">
+                <h3>What you'll learn</h3>
+            </div>
+
+            <div class="cont">
+                <div class="rowx">
+                    <div class="icon">
+                        <div class="icontainer"><i class="fas fa-school"></i></div>
+                    </div>
+                    <div class="text">At vero eos et accusamus et iusto odio dignissimos
+                        ducimus qui
+                        blanditiis
+                        praesentium voluptatum
+                    </div>
+                </div>
+                <div class="rowx">
+                    <div class="icon">
+                        <div class="icontainer"><i class="fas fa-school"></i></div>
+                    </div>
+                    <div class="text">At vero eos et accusamus et iusto odio dignissimos
+                        ducimus qui
+                        blanditiis
+                        praesentium voluptatum
+                    </div>
+                </div>
+                <div class="rowx">
+                    <div class="icon">
+                        <div class="icontainer"><i class="fas fa-school"></i></div>
+                    </div>
+                    <div class="text">At vero eos et accusamus et iusto odio dignissimos
+                        ducimus qui
+                        blanditiis
+                        praesentium voluptatum
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="certificateDiv">
+        <div class="titleTwins">
+            <div class="sectionLeft"></div>
+            <div class="arrow-up2"></div>
+            <div class="arrow-up"></div>
+            <div class="arrow-down"></div>
+
+            <h3 class="titleLeft">Certificates</h3>
+        </div>
+
+
+        <div class="titleSmall">
+            <h3>Certificates</h3>
+        </div>
+
+
+        <div class="con">
+            <div class="certi">
+                <img src="https://clipart.world/wp-content/uploads/2020/08/certificate-template-background-award-diploma-png.png"
+                    alt="" srcset="">
+                <div class="certiDesc">At vero eos et accusamus et iusto odio dignissimos
+                    ducimus qui
+                    blanditiis praesentium voluptatum deleniti atque corrupti </div>
+            </div>
+            <div class="certi">
+                <img src="https://clipart.world/wp-content/uploads/2020/08/certificate-template-background-award-diploma-png.png"
+                    alt="" srcset="">
+                <div class="certiDesc">At vero eos et accusamus et iusto odio dignissimos
+                    ducimus qui
+                    blanditiis praesentium voluptatum deleniti atque corrupti </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="testimonialDiv" id="testimonialSection">
+        <div class="titleTwins">
+            <div class="sectionLeft"></div>
+            <div class="arrow-up2"></div>
+            <div class="arrow-up"></div>
+            <div class="arrow-down"></div>
+
+            <h3 class="titleLeft">Testimonials</h3>
+        </div>
+
+
+        <div class="titleSmall">
+            <h3>Testimonials</h3>
+        </div>
+
+        <div class="testimonials ">
+            <div class='owl-carousel owl-theme'>
+                <% testimonials.forEach(testimonial=> { %>
+                    <div class="item">
+                        <img src="<%=testimonial.data().imageURL%>" alt="" srcset="" class="testiImg">
+                        <div class="name text-center">
+                            <%=testimonial.data().name%>
+                        </div>
+                        <div class="testiText">
+                            <%=testimonial.data().testimonial%>
+                        </div>
+                    </div>
+                    <% }); %>
+            </div>
+        </div>
+    </div>
+
+    <div class="workDiv" id="workSection">
+        <div class="titleTwins">
+            <div class="sectionLeft"></div>
+            <div class="arrow-up2"></div>
+            <div class="arrow-up"></div>
+            <div class="arrow-down"></div>
+
+            <h3 class="titleLeft">Work with us</h3>
+        </div>
+
+
+        <div class="titleSmall">
+            <h3>Work with us</h3>
+        </div>
+
+
+        <div class="tileContainer">
+            <div class="tile" style="background-image: url(https://www.campusfrance.org/sites/default/files/styles/mobile_visuel_principal_page/public/visa%20stagiaire.jpg?itok=ZOhxHziy);
+    background-size: contain; position: relative;">
+
+                <div class="tileOverlay"></div>
+                <div class="tileText"> <a href="<%= devFun %>/internships ">Intern with
+                        us</a></div>
+            </div>
+            <div class="tile" style="background-image: url(https://media.istockphoto.com/photos/click-here-and-it-should-direct-you-further-picture-id1134029530?k=20&m=1134029530&s=612x612&w=0&h=zokmOz9si3PtgBCJqlzu4VNRPYBgZYqQtZKhJdAy9EE=);
+    background-size: contain;position: relative;">
+
+                <div class="tileOverlay"><a href="<%= devFun %>/jobs "></div>
+                <div class="tileText">Job opportunities</a></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="aboutDiv" id="aboutSection">
+        <div class="titleTwins">
+            <div class="sectionLeft"></div>
+            <div class="arrow-up"></div>
+            <div class="sectionRight"></div>
+
+            <h3 class="titleLeft">About Us</h3>
+            <h3 class="titleRight">About Navin Shetty</h3>
+        </div>
+
+        <div class="titleSmall">
+            <h3>About Us</h3>
+        </div>
+
+        <div class="con">
+            <div class="aboutCont">
+                <div class="aboutPara">
+                    At vero eos et accusamus et iusto odio dignissimos ducimus qui
+                    blanditiis
+                    praesentium
+                    voluptatum deleniti atque corrupti quos dolores et quas molestias
+                    excepturi sint
+                    occae
+                    At
+                    vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+                    praesentium
+                    voluptatum deleniti atque corrupti quos dolores et quas molestias
+                    excepturi sint
+                    occae
+                    At
+                    vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+                    praesentium
+                    voluptatum deleniti atque corrupti quos dolores et quas molestias
+                    excepturi sint
+                    occae.
+                    At
+                    vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+                    praesentium
+                    voluptatum deleniti atque corrupti quos dolores et quas molestias
+                    excepturi sint
+                    occae
+                    At
+                    vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+                    ignissimos
+                    ducimus qui blanditiis praesentium
+                    voluptatum deleniti atque corrupti quos dolores et quas molestias
+                    excepturi sint
+
+                </div>
+                <div class="readLink"><a href="<%= devFun %>/about">Read More</a></div>
+            </div>
+            <div class="titleSmall">
+                <h3>About Navin Shetty</h3>
+            </div>
+            <div class="aboutCont">
+                <div class="aboutPara">
+                    At vero eos et accusamus et iusto odio dignissimos ducimus qui
+                    blanditiis
+                    praesentium
+                    voluptatum deleniti atque corrupti quos dolores et quas molestias
+                    excepturi sint
+                    occae
+                    At
+                    vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+                    praesentium
+                    voluptatum deleniti atque corrupti quos dolores et quas molestias
+                    excepturi sint
+                    occae
+                    At
+                    vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+                    praesentium
+                    voluptatum deleniti atque corrupti quos dolores et quas molestias
+                    excepturi sint
+                    occae.
+                    At
+                    vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+                    praesentium
+                    voluptatum deleniti atque corrupti quos dolores et quas molestias
+                    excepturi sint
+                    occae
+                    At
+                    vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+                    ignissimos
+                    ducimus qui blanditiis praesentium
+                    voluptatum deleniti atque corrupti quos dolores et quas molestias
+                    excepturi sint
+
+                </div>
+                <div class="readLink"><a href="<%=devFun %>/navin">Read More</a></div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="clientDiv">
+        <div class="titleTwins">
+            <div class="sectionLeft"></div>
+            <div class="arrow-up2"></div>
+            <div class="arrow-up"></div>
+            <div class="arrow-down"></div>
+
+            <h3 class="titleLeft">Our Clients</h3>
+        </div>
+
+        <div class="titleSmall">
+            <h3>Our Clients</h3>
+        </div>
+
+        <div class="bigClient">
+            <img src="https://play-lh.googleusercontent.com/0rgPYj0GwZ6txpYZrzoMdhwzqg7vY6C9B-Ol7jlaz-Ox2rgpD4Tr82ZgDqkirrEohbGm"
+                alt="" srcset="">
+        </div>
+
+        <div class="clients">
+            <div class="owl-carousel owl-theme">
+                <div class="client item">
+                    <img src="https://play-lh.googleusercontent.com/0rgPYj0GwZ6txpYZrzoMdhwzqg7vY6C9B-Ol7jlaz-Ox2rgpD4Tr82ZgDqkirrEohbGm"
+                        alt="">
+                </div>
+                <div class="client item">
+                    <img src="data:image/jpeg;base64,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"
+                        alt="">
+                </div>
+                <div class="client item">
+                    <img src="https://www.slashgear.com/wp-content/uploads/2020/02/hulu_main.jpg" alt="">
+                </div>
+                <div class="client item">
+                    <img src="https://images.firstpost.com/wp-content/uploads/2019/11/Disneyplus.jpg" alt="">
+                </div>
+                <div class="client item">
+                    <img src="data:image/png;base64,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"
+                        alt="">
+                </div>
+                <div class="client item">
+                    <img src="https://static0.cbrimages.com/wordpress/wp-content/uploads/2019/03/warner-bros-logo.jpg"
+                        alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <form action="<%= devFun %>/cart" method="post" id="cartForm">
+    <input type="text" name="courseID" value="<%=latestCourse.id%>" hidden>
+    </form>
+    <script src="https://player.vimeo.com/api/player.js"></script>
+
+    <script>
+        const redirect = `<%=devFun%>`
+        const previewURL = `<%= latestCourse.data().previewLink %> `
+        const player = document.querySelector('#player');
+        var options = {
+            url: previewURL,
+            responsive: true,
+            background: true
+            // playsinline: false,
+            // controls: false,
+            // autoplay: true
+        };
+        var videoPlayer = new Vimeo.Player('player', options);
+        const btnPlay = document.querySelector('#playBtn')
+        let togglePlay = true
+
+        if (btnPlay) {
+            btnPlay.addEventListener('click', () => {
+                if (!togglePlay) {
+                    videoPlayer.play()
+                    togglePlay = true
+                }
+                else {
+                    videoPlayer.pause()
+                    togglePlay = false
+                }
+            })
+        }
+        videoPlayer.on('play', function () {
+        });
+    </script>

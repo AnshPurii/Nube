@@ -1,0 +1,61 @@
+/* .authNeeded {
+  display: none;
+} */
+
+body,
+a {
+  color: white;
+}
+
+body {
+  background-color: rgb(24, 28, 34);
+}
+
+.testimonialImage .change {
+  position: absolute;
+  top: 45%;
+  left: 45%;
+  font-size: 40px;
+}
+
+.testimonialImage img {
+  object-fit: cover;
+  width: 320px;
+  height: 320px;
+}
+
+.testimonialImage .imgOverlay {
+  background-color: rgba(24, 28, 34, 0.5);
+  width: 320px;
+  height: 320px;
+  position: absolute;
+}
+
+.testimonials img {
+  object-fit: cover;
+  width: 200px;
+  height: 200px;
+}
+
+.feedback {
+  position: relative;
+}
+
+.feedbackLabel {
+  position: absolute;
+  display: inline-block;
+  top: 5px;
+  left: 20px;
+  width: fit-content;
+  background-color: rgb(24, 28, 34);
+}
+
+/* .border-info {
+  border-color: #15829a !important;
+}
+
+.btn-info {
+  background-color: #15829a !important;
+  color: white;
+  border-color: #15829a !important;
+} */

@@ -1,0 +1,126 @@
+<% layout('/template/adminBoilerplate') -%>
+
+                   <%  if(prevOrder=='0') {%> 
+                         <h4 class="text-center mt-5">Add the first Module </h4>
+                    <% } else { %> 
+                         <h4 class="text-center mt-5">Adding after Module <%= prevOrder %> </h4> 
+                    <% } %> 
+                <div class="container p-5">
+                    <form action="<%= devFun %>/adminAddModule/<%= uid %>/<%= courseID %>/<%= parseInt(prevOrder)+1 %>" method="post" class="row" id="addModuleForm">
+                        
+                        <div class="col-lg-6">
+                            <div class="mb-5">
+                                <label for="moduleName" class="form-label">Module name</label>
+                                <input type="text"
+                                    class="form-control text-light bg-transparent border-0 border-bottom border-info"
+                                    id="moduleName" name="moduleName">
+                            </div>
+                            <div class="mb-5">
+                                <label for="moduleDescription" class="form-label">Module Description</label>
+                                <textarea class="form-control text-light bg-transparent border border-info"
+                                    id="moduleDescription" name="moduleDescription" rows="10"></textarea>
+                            </div>
+                            <div class="mb-5 d-flex justify-content-center">
+                                <label class="btn btn-info" id="btnUpload">Upload
+                                    course
+                                    thumbnail
+                                    <input type="file" id="inputUpload" hidden>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 ps-5 pt-2 d-flex flex-column justify-content-center">
+                            <div class="mb-5">
+                                <img src="" alt="" class="thumbnail" style="width:100%; height: 100%; object-fit: contain;" hidden>
+                            </div>
+                            <div class="mt-2 text-center" id="progressBar"></div>
+                            
+                        </div>
+                        <div class="row buttons d-flex flex-column align-items-center">
+                            <button type="submit" class=" btn btn-primary  w-25">Save
+                                Module</button>
+                            <a type="button" style="width:fit-content" class="btn btn-danger mt-3" href="<%= devFun %>/adminAllModules/<%= uid %>/<%= courseID %>">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+                <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+                <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+                <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+                <script src="<%=prodEnv%>__/firebase/init.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/uuid@latest/dist/umd/uuidv4.min.js"></script>
+                <script>
+                    var storage = firebase.storage();
+                    const form = document.querySelector('#addModuleForm')
+                    const btnUpload = document.querySelector('#btnUpload')
+                    const inputUpload = document.querySelector('#inputUpload')
+                    const thumbnailImg = document.querySelector('.thumbnail')
+                    // const imageID =  (parseInt('<%#= prevModuleID %>')+1).toString
+                    const imageID = uuidv4()
+                    const moduleID = imageID
+                    const courseID = '<%= courseID %>'
+                    const defaultPicURL = 'https://firebasestorage.googleapis.com/v0/b/nubefilmacademysite.appspot.com/o/defaultCoursePic%2FcourseThumb.png?alt=media&token=90de2b98-2454-4f77-8ef8-5017b60f7926'
+        
+                    btnUpload.addEventListener('change', () => {
+                        thumbnailImg.hidden = false
+                        thumbnailImg.src =  URL.createObjectURL(inputUpload.files[0])
+                    })
+        
+                    async function uploadImage(imagesRef) {
+                            const file = inputUpload.files[0]
+                            if(file)
+                            {
+                                const uploadTask = imagesRef.put(file)
+                                uploadTask.on('state_changed', 
+                                (snapshot) => {
+                                    // Observe state change events such as progress, pause, and resume
+                                    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                                    var progress = parseInt((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                                    document.querySelector('#progressBar').innerText = 'Upload is ' + progress + '% done. Please wait.'
+                                }, 
+                                (error) => {
+                                    // Handle unsuccessful uploads
+                                    console.log('Error uploading image')
+                                    console.log(error)
+                                    submitForm(defaultPicURL)
+                                }, 
+                                () => {
+                                    // Handle successful uploads on complete
+                                    // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                                    uploadTask.snapshot.ref.getDownloadURL().then((downloadurl) => {
+                                        submitForm(downloadurl)
+                                    });
+                                }
+                                );
+                            }
+                            else{
+                                submitForm(defaultPicURL)
+                            }
+                    }
+        
+                    function submitForm(downloadURL) {
+                        const imageInput = document.createElement('input')
+                        imageInput.value = downloadURL
+                        imageInput.name = 'thumbnailURL'
+                        imageInput.hidden = true
+                        form.append(imageInput)
+                        const inputImageID = document.createElement('input')
+                        inputImageID.value = imageID
+                        inputImageID.name = 'thumbnailID'
+                        inputImageID.hidden = true
+                        form.append(inputImageID)
+                        const inputModuleID = document.createElement('input')
+                        inputModuleID.value = moduleID
+                        inputModuleID.name = 'moduleID'
+                        inputModuleID.hidden = true
+                        form.append(inputModuleID)
+                      
+                        form.submit()
+                    }
+        
+                    form.addEventListener('submit', (event) => {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    
+                        var imagesRef = storage.ref().child('modules/' + courseID + '/' + imageID);
+                        uploadImage(imagesRef)
+                    })
+                </script>

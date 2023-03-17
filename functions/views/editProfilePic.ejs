@@ -1,0 +1,103 @@
+<% layout('/template/boilerplate') -%>
+ 
+                    <div class="profilePicPage">
+                        <div class="profilePicContainer">
+                            <div class="imgProfile">
+                                <img src="https://firebasestorage.googleapis.com/v0/b/nubefilmacademysite.appspot.com/o/profilePictures%2FdefaultProfile.png?alt=media&token=35e63948-1c4f-4035-9a42-1a3dd850ab8f"
+                                    alt="" srcset="" id="profilePic">
+                            </div>
+                            <div class="my-2 text-center" id="progressBar"></div>
+                            <div class="mt-5">
+                                <label class="btn btn-primary" id="btnUpload">Upload
+                                    <input type="file" id='inputUpload' hidden>
+                                </label>
+
+                                <button type="button" class="btn btn-danger ms-3" id="btnDelete">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+                    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+                    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+                    <script src="<%=devEnv%>__/firebase/init.js"></script>
+                    <script>
+                        var storage = firebase.storage();
+                        var imagesRef = storage.ref().child('profilePictures/<%=uid%>/pic');
+                        const btnUpload = document.querySelector('#btnUpload')
+                        const btnDelete = document.querySelector('#btnDelete')
+                        const inputUpload = document.querySelector('#inputUpload')
+                        const profilePic = document.querySelector('#profilePic')
+                        const defaultPicURL = 'https://firebasestorage.googleapis.com/v0/b/nubefilmacademysite.appspot.com/o/profilePictures%2FdefaultProfile.png?alt=media&token=35e63948-1c4f-4035-9a42-1a3dd850ab8f'
+
+                        btnUpload.addEventListener('change', function (event) {
+                            const file = inputUpload.files[0]
+                            // imagesRef.put(file).then((snapshot) => {
+                            //     snapshot.ref.getDownloadURL().then(async (downloadURL) => {
+                            //         profilePic.src = downloadURL
+                            //         const user = firebase.auth().currentUser;
+                            //         if (user !== null && user.uid == '<%#=uid%>') {
+                            //             await user.updateProfile({
+                            //                 photoURL: downloadURL
+                            //             })
+                            //         }
+                            //     });;
+                            // });
+                            const uploadTask = imagesRef.put(file)
+                            uploadTask.on('state_changed', 
+                            (snapshot) => {
+                                // Observe state change events such as progress, pause, and resume
+                                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                                var progress = parseInt((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                                document.querySelector('#progressBar').innerText = 'Upload is ' + progress + '% done. Please wait.'
+                            }, 
+                            (error) => {
+                                // Handle unsuccessful uploads
+                                alert('Error uploading image')
+                                console.log('Error uploading image')
+                                console.log(error)
+                            }, 
+                            () => {
+                                // Handle successful uploads on complete
+                                // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                                uploadTask.snapshot.ref.getDownloadURL().then(async(downloadURL) => {
+                                    profilePic.src = downloadURL
+                                    document.querySelectorAll('.profilePic').forEach(pic => {
+                                        pic.src = downloadURL
+                                    });
+                                    const user = firebase.auth().currentUser;
+                                    if (user !== null && user.uid == '<%=uid%>') {
+                                        await user.updateProfile({
+                                            photoURL: downloadURL
+                                        })
+                                    }
+                                });
+                                document.querySelector('#progressBar').innerText = 'Done'
+                            }
+                            );
+                        })
+                        
+                        btnDelete.addEventListener('click', function () {
+                            imagesRef.delete().then(async () => {
+                                profilePic.src = defaultPicURL
+                                const user = firebase.auth().currentUser;
+                                if (user !== null && user.uid == '<%=uid%>') {
+                                    await user.updateProfile({
+                                        photoURL: defaultPicURL
+                                    })
+                                    console.log('updated')
+                                }
+                            }).catch((error) => {
+                                console.log(error)
+                            });
+                        })
+
+
+                        firebase.auth().onAuthStateChanged(user => {
+                            if (!user) {
+                                window.location = '<%=devFun%>'
+                            } else {
+                                profilePic.src = user.photoURL
+                            }
+                        })
+                    </script>

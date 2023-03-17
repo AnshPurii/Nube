@@ -1,0 +1,47 @@
+<% layout('/template/adminBoilerplate') -%>
+
+
+    <div class="container my-5">
+        <h3 class="text-center">Job</h3>
+        <form action="<%=devFun%>/adminEditJob/<%= uid %>/<%= job.id %>?_method=PUT" method="post" class="row">
+            <div class="col-2 col-lg-4"></div>
+            <div class="col-8 col-lg-4 my-5">
+                <div class="mb-5 row ">
+                    <label for="jobRole" class="form-label">Job Role</label>
+                    <input type="text" class="form-control text-light bg-transparent border-0 border-bottom border-info"
+                        id="jobRole"  value="<%= job.data().jobRole %>" name="jobRole">
+                </div>
+                <div class="mb-5 row ">
+                    <label for="jobExperience" class="form-label">Experience</label>
+                    <input type="text" class="form-control text-light bg-transparent border-0 border-bottom border-info"
+                        id="jobExperience" value="<%= job.data().jobExperience %>" name="jobExperience">
+                </div>
+                <div class="mb-5 row ">
+                    <label for="" class="form-label">City</label>
+                    <input type="text" class="form-control text-light bg-transparent border-0 border-bottom border-info"
+                        id="jobCity" value="<%= job.data().jobCity %>" name="jobCity">
+                </div>
+                <div class="mb-5 row ">
+                    <label for="" class="form-label">Country</label>
+                    <input type="text" class="form-control text-light bg-transparent border-0 border-bottom border-info"
+                        id="jobCountry" value="<%= job.data().jobCountry %>" name="jobCountry">
+                </div>
+                <div class="row d-flex flex-column align-items-center mt-5">
+                    <button type="submit" class="btn btn-info w-50 mb-3">Save and Exit</button>
+                     <div class="btn btn-danger w-50" id="btnDelete">Delete job</div>
+                </div>
+            </div>
+            <div class="col-2 col-lg-4"></div>
+        </form>
+        <form action="<%=devFun%>/adminDeleteJob/<%=uid%>/<%=job.id%>?_method=DELETE"
+            method="post" id="deleteForm" hidden>
+        </form>
+    </div>
+
+    <script>
+        document.querySelector('#btnDelete').addEventListener('click', () => {
+            const form = document.querySelector('#deleteForm')
+            // console.log(form)
+            form.submit()
+        })
+    </script>

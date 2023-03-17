@@ -1,0 +1,47 @@
+<% layout('/template/adminBoilerplate') -%>
+ 
+                    <h4 class="text-center mt-3">Editing Test <%= lecture.data().lectureOrder %>
+                    </h4>
+                    <div class="container p-5 ">
+                        <form
+                            action="<%= devFun %>/adminEditTest/<%= uid %>/<%= courseID %>/<%= moduleID %>/<%= lecture.id %>?_method=PUT"
+                            method="post" class="row">
+                            <div class="mb-5">
+                                <label for="lectureName" class="form-label">Test name</label>
+                                <input type="text"
+                                    class="form-control text-light bg-transparent border-0 border-bottom border-info"
+                                    id="lectureName" name="lectureName" value="<%= lecture.data().lectureName %>">
+                            </div>
+                            <div class="mb-5">
+                                <label for="testInstructions" class="form-label">Test Instructions</label>
+                                <textarea class="form-control text-light bg-transparent border border-info"
+                                    id="testInstructions" name="testInstructions"
+                                    rows="10"><%= lecture.data().testInstructions %></textarea>
+                            </div>
+                            <div class="mb-5">
+                                <label for="testResourceLink" class="form-label">Test resource link</label>
+                                <input type="text"
+                                    class="form-control text-light bg-transparent border-0 border-bottom border-info"
+                                    id="testResourceLink" name="testResourceLink"
+                                    value="<%= lecture.data().testResourceLink %>">
+                            </div>
+                            <div class="row buttons d-flex flex-column align-items-center">
+                                <button type="submit" class=" btn btn-primary  w-25">Save
+                                    Test</button>
+                                <button type="button" style="width:fit-content" class="btn btn-danger mt-3" id="btnDelete">Delete
+                                    Test</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <form
+                        action="<%=devFun%>/adminDeleteLecture/<%=uid%>/<%=courseID%>/<%=moduleID%>/<%= lecture.id %>?_method=DELETE"
+                        method="post" id="deleteForm" hidden>
+                    </form>
+
+                    <script>
+                        document.querySelector('#btnDelete').addEventListener('click', () => {
+                            const form = document.querySelector('#deleteForm')
+                            form.submit()
+                        })
+                    </script>

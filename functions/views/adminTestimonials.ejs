@@ -1,0 +1,37 @@
+<% layout('/template/adminBoilerplate') -%>
+ 
+
+                    <div class="container my-5">
+                        <div class="row d-flex flex-row justify-content-between mt-5 mx-2">
+                            <div class="col-lg-10 col-6">
+                                <h3 class="ps-5 ">Testimonials</h3>
+                            </div>
+                            <a class="btn btn-info col-lg-2 col-6" href="<%=devFun%>/adminNewTestimonial/<%= uid %> ">
+                                Add
+                                Testimonial
+                            </a>
+                        </div>
+
+                        <%    testimonials.forEach(testimonial => { %>
+
+                        <div class="row testimonials border-0 border-bottom border-info">
+                                <div
+                                    class="col-lg-3 col-12 my-lg-5 p-lg-5 my-2 p-3 d-flex justify-content-center align-items-center">
+                                    <img src="<%=testimonial.data().imageURL%>"
+                                        class="rounded-circle" alt="">
+                                </div>
+                                <div class="col-lg-7 col-12 my-lg-5  my-2 p-5">
+                                    <h5 class="row"><%=testimonial.data().name%></h5>
+                                    <div class="row mt-4"><%=testimonial.data().testimonial%></div>
+                                </div>
+                                <div
+                                    class="col-lg-2 col-12 my-lg-5 p-lg-5 my-2 p-3 d-flex justify-content-center align-items-center">
+                                    <a class="change " href="<%=devFun%>/adminEditTestimonial/<%= uid %>/<%=testimonial.id%>"><i
+                                            class="fs-3 fas fa-pen"></i></a>
+                                </div>
+                        </div>
+                      <% }); %> 
+
+                    </div>
+
+                   

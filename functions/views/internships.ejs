@@ -1,0 +1,23 @@
+<% layout('/template/boilerplate') -%>
+ 
+                    <div class="pageHead">
+                        <h3>Internships</h3>
+
+                        <div class="jobContainer">
+                            <%  internships.forEach(internship => { %>
+                            <div class="job">
+                                <div class="jobHead"><%=internship.data().internshipRole%> </div>
+                                <div class="jobDuration">Duration : <%=internship.data().internshipDuration%></div>
+                                <div class="jobLocation"><%=internship.data().internshipCity%>, <%=internship.data().internshipCountry%></div>
+                                <div class="postDate"><%=internship.data().postTime.toDate().toDateString()%></div>
+                            </div>
+                            <% }); %> 
+                        </div>
+
+                        <div class="cta">
+                            <a href="<%= devFun %>/getInTouch"><button>Apply</button></a>
+                        </div>
+
+
+
+                    </div>

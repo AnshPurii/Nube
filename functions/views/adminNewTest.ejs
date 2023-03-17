@@ -1,0 +1,30 @@
+<% layout('/template/adminBoilerplate') -%>
+
+                <h4 class="text-center mt-5">Adding Test after Lecture <%=prevLecOrder%>
+                </h4>
+                <div class="container p-5 ">
+                    <form action="<%= devFun %>/adminAddTest/<%= uid %>/<%= courseID %>/<%= moduleID %>/<%= parseInt(prevLecOrder)+1 %>" method="post" class="row">
+                        <div class="mb-5">
+                            <label for="lectureName" class="form-label">Test name</label>
+                            <input type="text"
+                                class="form-control text-light bg-transparent border-0 border-bottom border-info"
+                                id="lectureName" name="lectureName">
+                        </div>
+                        <div class="mb-5">
+                            <label for="testInstructions" class="form-label">Test Instructions</label>
+                            <textarea class="form-control text-light bg-transparent border border-info"
+                                id="testInstructions"  name="testInstructions" rows="10"></textarea>
+                        </div>
+                        <div class="mb-5">
+                            <label for="testResourceLink" class="form-label">Test resource link</label>
+                            <input type="text"
+                                class="form-control text-light bg-transparent border-0 border-bottom border-info"
+                                id="testResourceLink" name="testResourceLink" >
+                        </div>
+                        <div class="row buttons d-flex flex-column align-items-center">
+                            <button type="submit" class=" btn btn-primary  w-25">Save
+                                Test</button>
+                            <a type="button" style="width:fit-content" class="btn btn-danger mt-3"  href="<%= devFun %>/adminAllModules/<%= uid %>/<%= courseID %>">Cancel</a>
+                        </div>
+                    </form>
+                </div>

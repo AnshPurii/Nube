@@ -1,0 +1,73 @@
+<% layout('/template/adminBoilerplate') -%>
+ 
+                    <div class="container my-5">
+                        <div class="row mb-5">
+                            <div class="col-12 col-lg-8 offset-lg-2">
+                                <h3 class="text-center">Student Data</h3>
+                                <p class="text-center text-white-50">Students: <%= students.length  %> </p>
+                            </div>
+                            <!-- <div class="col-12 col-lg-2 d-flex justify-content-end align-items-center" >
+                                <i class="fas fa-search  me-2"></i>
+                                <input type="text" name="searchBar" id="searchBar" placeholder="Search Name"
+                                    class="form-control text-white-50 border-0 border-bottom border-info bg-transparent">
+                            </div> -->
+                        </div>
+                        <div class="row my-5 text-white-50 fs-5">
+                            <div class="col-3">Name</div>
+                            <div class="col-3">Phone Number</div>
+                            <div class="col-3">Email ID</div>
+                            <div class="col-3"></div>
+                        </div>
+                       
+                        <% students.forEach(student => { %> 
+                        <div class="row my-5 py-3 border-0 border-bottom border-info">
+                            <div class="col-3"><%=student.data().name %></div>
+                            <div class="col-3"><%=student.data().number %></div>
+                            <div class="col-3"><%=student.data().email %></div>
+                                <div class="col-3 text-end"><a class="btn btn-primary btnDetails" href="<%= devFun %>/adminStudent/<%= uid %>/<%=student.id%> "
+                                        id='<%=student.id%>'>
+                                        Show details</a>
+                                </div>
+                        </div>
+                        <% }) %> 
+
+                    </div>
+
+                    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+                    <script>
+                        // document.querySelectorAll('.btnDetails').forEach((student) => {
+                        //     var toggleDetails = true;
+                        //     const resultDiv = document.createElement('div')
+                        //     student.addEventListener('click', () => {
+                        //         if (toggleDetails) {
+                        //             axios.get('<%#= devFun %>/adminStudent/<%#= uid %>/' + student.id)
+                        //                 .then(function (response) {
+                        //                     // handle success
+                        //                     // console.log('<%#= prodFun %>/adminStudent/<%#= uid %>/' + student.id)
+                        //                     resultDiv.innerHTML = response.data
+
+                        //                 })
+                        //                 .catch(function (error) {
+                        //                     // handle error
+                        //                     alert(error);
+                        //                 })
+                        //                 .then(function () {
+                        //                     // always executed
+                        //                 });
+                        //             student.classList.remove('btn-primary')
+                        //             student.classList.add('btn-warning')
+                        //             student.innerText = 'Hide Details'
+                        //         }
+                        //         else {
+                        //             resultDiv.innerHTML = ''
+                        //             student.classList.remove('btn-warning')
+                        //             student.classList.add('btn-primary')
+                        //             student.innerText = 'Show Details'
+                        //         }
+                        //         student.parentElement.parentElement.appendChild(resultDiv)
+                        //         toggleDetails = !toggleDetails
+
+                        //     })
+
+                        // })
+                    </script>

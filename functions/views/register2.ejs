@@ -1,0 +1,65 @@
+<% layout('/template/boilerplate') -%>
+ 
+                    <div class="pageHead">
+                        <%= email %>
+                            <h3>Register</h3>
+                            <form action="<%= devFun %>/registerFinal " method="post" novalidate>
+                                <div class="formInput mb-5">
+                                    <label for="password" class="form-label text-white-50">Password</label>
+                                    <input type="password" name="password" id="password" class="form-control text-light"
+                                        required>
+
+                                </div>
+                                <div class="formInput mb-5">
+                                    <label for="password" class="form-label text-white-50">Re-enter Password</label>
+                                    <input type="password" name="password" id="password2"
+                                        class="form-control text-light" required>
+                                    <div class="invalid-feedback">
+                                        Please enter a valid password
+                                    </div>
+                                </div>
+
+                                <div class="submit">
+                                    <div class="cta">
+                                        <button>Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                    </div>
+                    <form action="<%= devFun %>/saveUser" method="post" id="saveForm" hidden>
+                        <input type="text" name="name" id="name" value="<%= name %> ">
+                        <input type="text" name="number" id="number" value="<%= number %>">
+                        <input type="email" name="email" id="email" value="<%= email %>">
+                        <input type="text" name="uid" id="uid" >
+                    </form>
+
+                    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+                    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+                    <script src="<%=devEnv%>__/firebase/init.js"></script>
+                    <script src="<%= devEnv %>assets/js/auth.js "></script>
+                    <script>
+                        const feedbackDiv = document.querySelector('.invalid-feedback')
+                        const email1 = '<%= email %>'
+                        const name = '<%= name %>'
+                        const number = '+91<%= number %>'
+                        const pwd = document.querySelector('#password')
+                        const pwd2 = document.querySelector('#password2')
+
+                        document.querySelector('.cta button').addEventListener('click', async () => {
+                            event.preventDefault()
+                            event.stopPropagation()
+                            if (pwd.value !== pwd2.value) {
+                                feedbackDiv.style.display = 'inline'
+                                feedbackDiv.innerText = 'Passwords don\'t match'
+                            }
+                            else {
+                                const uid = await createAccount()
+                                document.querySelector('#uid').value = uid;
+                                document.querySelector('#saveForm').submit()
+                            }
+                        })
+
+                        
+
+
+                    </script>

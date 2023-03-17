@@ -1,0 +1,263 @@
+<% layout('/template/boilerplate') -%>
+
+                    <% const lecsInOrder = [] %> 
+                    <div class="coursePages courseDiv">
+                        <div class="sectionHead" style="margin: 180px 0 80px;">
+                            <h3><%= course.data().courseName %> </h3>
+                            <div class="details">
+                                <div class="hours"><%= durationUnit(course.data().duration) %></div>
+                                <div class="modules"><%= course.data().numModules %> Modules</div>
+                                <div class="lecs"><%= course.data().numLectures %> Lectures</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="position:relative;"  id="player">
+                        <!-- <iframe
+                            src="https://player.vimeo.com/video/668521767?h=0842b862a5&amp;controls=0&amp;loop=1&amp;controls=1&amp;autoplay=1&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                            frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
+                            style="position:absolute;top:0;left:0;width:100%;height:100%;"
+                            title="pexels-koolshooters-9724046 (1)">
+                        </iframe> -->
+                    </div>
+
+        <div class="courseModules">
+            <% modules.forEach(module => { %> 
+            <div class="courseModule">
+                <div class="moduleTitle">
+                    <div class="moduleLeft">
+                        <div class="moduleName">
+                            <%= module.data().moduleOrder %>. <%= module.data().moduleName %>
+                        </div>
+                        <% var lecsCompleted = 0 %>
+                        <% studLectures.forEach(lec => { %>
+                        <% if(module.id===lec.data().moduleID&&lec.data().isCompleted){ %>
+                        <% lecsCompleted++} %>  
+                        <% }) %>  
+                        <div class="moduleCompletedLecs"><%= lecsCompleted %> / <%= module.data().numLectures %> lectures completed</div>
+                    </div>
+                    <div class="moduleRight">
+                        <div class="moduleDuration"><%= durationUnit(module.data().duration) %></div>
+                        <div class="expandModule"><i class="fas fa-chevron-down"></i></div>
+                    </div>
+                </div>
+
+                <div class="moduleIntro"><%= module.data().moduleDescription %>
+                </div>
+                <div class="lectures">
+                    <% lectures.forEach((lecture, index) => { %> 
+                    <% if(lecture.data().moduleID===module.id) {%> 
+                    <% lecsInOrder.push({lectureID : lecture.id, lectureURL : lecture.data().lecVidURL}) %> 
+                    <% if(!lecture.data().isTest){ %> 
+                    <div style="cursor: pointer;" class="lecture" onclick="playThis('<%=lecture.data().lecVidURL%>','<%=lecture.id%>')">
+                        <div class="lecTitle">
+                            <div class="lecCompleted" id="y<%=lecture.id%>">
+                                <% const lec = studLectures.find(lec => lec.id===lecture.id) %> 
+                                <% if(!lec.data().isCompleted){ %> 
+                                <i class="far fa-square"></i>
+                                <% } else { %> 
+                                <i class="fas fa-check-square"></i>
+                                <% } %> 
+                            </div>
+                            <div class="lecDetail">
+                                <div class="lecName"><%= module.data().moduleOrder %>.<%= lecture.data().lectureOrder %> <%= lecture.data().lectureName %></div>
+                                <div class="lecDuration"><%= durationUnit(lecture.data().duration) %></div>
+                                <div class="lecDesc"><%= lecture.data().lectureDescription %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% } else { %> 
+                    <div class="lecture" >
+                        <div class="lecTitle"  onclick="playThis(null,'<%=lecture.id%>')">
+                            <div class="lecCompleted" >
+                                <% const lec = studLectures.find(lec => lec.id===lecture.id) %> 
+                                <% if(!lec.data().isCompleted){ %> 
+                                <i class="far fa-square"></i>
+                                <% } else { %> 
+                                <i class="fas fa-check-square"></i>
+                                <% } %> 
+                            </div>
+                            <div class="lecDetail">
+                                <div class="lecName assignmentName"><%= module.data().moduleOrder %>.<%= lecture.data().lectureOrder %> <%= lecture.data().lectureName %></div>
+                                <% const test = studTests.find(lec => lec.id===lecture.id) %> 
+                                <% if(typeof(test)!=='undefined') { %>
+                                    <% if(test.data().grade) {%>  
+                                            <div class="lecDuration ">Submission status: Graded <%= test.data().grade %> </div>
+                                        <% } else { %> 
+                                            <div class="lecDuration ">Submission status: Submitted</div>
+                                        <% } %> 
+                                <% } else { %> 
+                                            <div class="lecDuration ">Submission status: Pending</div>
+                                <% } %> 
+                                <div class="lecDesc assignmentLink"><%= lecture.data().testInstructions %>
+                                    <a href="<%= lecture.data().testResourceLink %>" style="display: block;" >View Resource</a>
+                                </div>
+                                <% if(typeof(test)!=='undefined') { %>
+                                    <% if(test.data().feedback) { %> 
+                                        <div class="assignmentFeedback">
+                                            <h4>Feedback</h4>
+                                            <div class="feedbackText">  <%= test.data().feedback  %> </div>
+                                        </div>
+                                    <% } %> 
+                                <% } else { %> 
+                                    <div class="assignmentForm"  id="x<%=lecture.id%>" >
+                                        <form action="<%=devFun%>/submitAssignment/<%=uid%>/<%=course.id%>/<%=lecture.id%>" onsubmit="event.preventDefault(); submitt('<%=lecture.id%>');" method="post">
+                                            <label for="submissionLink" class="form-label">Paste the link to
+                                                your assignment here <p class="text-white-50 fw-lighter " style="font-size: 14px;">Warning : Lecture will only be graded if the link is legitimate</p></label>
+                                            <input type="text" name="submissionLink" 
+                                                class="form-control text-light submissionLink">
+                                            <div class="cta">
+                                                <!-- onclick="submitt('<%#=lecture.id%>')" -->
+                                                <button>Upload Assignment</button>
+                                            </div>
+                                            <!-- <p class="text-danger mt-2 fw-lighter" style="font-size: 14px;" hidden>You cannot submit until you complete lectures before the test</p> -->
+                                        </form>
+                                    </div>
+                                <% } %> 
+                            </div>
+                        </div>
+                    </div>
+                    <% } %> 
+                    <% } %> 
+                    <% }) %> 
+                </div>
+
+            </div>
+            <% }) %> 
+        </div>
+       
+        <% if(percentCompleted==100) {%> 
+            <h3 class="text-center btn-info p-5 mx-5" ><a href="<%= devFun %>/getCertificate/<%= uid %>/<%= course.id %>">Get certificate</a></h3>
+        <% } else { %> 
+            <p class="text-center text-white-50">Once you complete the course, reload to get certificate</p>
+            <% } %> 
+                    <script src="https://player.vimeo.com/api/player.js"></script>
+                    <script>
+                      
+
+                        //code to hide and expand modules
+                        const expanderList = document.querySelectorAll('.expandModule i')
+                        expanderList.forEach(expander => {
+                            let toggleHide = true
+                            expander.addEventListener('click', (e) => {
+                                if (toggleHide) {
+                                    const elementsToHide = e.path[4].children
+                                    Array.from(elementsToHide).forEach((element, index) => {
+                                        if (index !== 0)
+                                            element.style.display = 'none'
+                                    });
+                                }
+                                else {
+                                    const elementsToHide = e.path[4].children
+                                    Array.from(elementsToHide).forEach((element, index) => {
+                                        if (index !== 0)
+                                            element.style.display = 'flex'
+                                    });
+                                }
+                                toggleHide = !toggleHide
+
+                            })
+                        });
+
+                        const lecsInOrder = JSON.parse('<%- JSON.stringify(lecsInOrder)%>')
+                        const player = document.querySelector('#player');
+                        
+                        var currLecID, currLecURL, nextLecID, nextLecURL, videoPlayer
+                        const setLecs = (currentLectureID) => {
+                            let lecIndex = 0
+                            lecsInOrder.forEach((lec, index) => {
+                                if(lec.lectureID==currentLectureID){
+                                    currLecURL = lec.lectureURL
+                                    currLecID = currentLectureID
+                                    lecIndex = index
+                                }
+                            });
+                            if(lecsInOrder[lecIndex+1]){
+                                nextLecID = lecsInOrder[lecIndex+1].lectureID
+                                nextLecURL = lecsInOrder[lecIndex+1].lectureURL
+                            } else {
+                                nextLecID = lecsInOrder[0].lectureID
+                                nextLecURL = lecsInOrder[0].lectureURL
+                            }
+                        }
+
+                        const generateVidPlayer = (url) => {
+                            var options = {
+                                url: url,
+                                responsive: true,
+                                controls: true,
+                                autoplay: true,
+                                byline: false,
+                                portrait: false,
+                                title: false
+                            };
+                            videoPlayer = new Vimeo.Player('player', options);
+
+                            videoPlayer.on('ended', (data) => {
+                                var settings = {
+                                    "url": "<%=devFun%>/completedLec/<%=uid%>/<%=course.id%>/"+currLecID,
+                                    "method": "POST",
+                                    "timeout": 0,
+                                    "headers": {
+                                        "Content-Type": "application/json"
+                                    },
+                                    "data": JSON.stringify({
+                                        "nextLecID": nextLecID
+                                    })
+                                };
+                                $.ajax(settings).done(function (response) {
+                                    const tickBox = document.querySelector(`#y${currLecID}`)
+                                    tickBox.innerHTML = '<i class="far fas fa-check-square"></i>'
+                                    playThis(nextLecURL, nextLecID)
+                                });
+                            });
+                        }
+                        
+                        const submitt = (lectureID) => {
+                          const submissionInput = document.querySelector(`#x${lectureID} input`)
+                          const submissionForm = document.querySelector(`#x${lectureID} form`)
+
+                           const nextLecInput = document.createElement('input')
+                            nextLecInput.name = "nextLecID"
+                            nextLecInput.value = nextLecID
+                            nextLecInput.hidden=true
+                            submissionForm.appendChild(nextLecInput)
+                            submissionForm.submit()
+
+                        }
+                
+                        const playThis = (lectureURL, lectureID) => {
+                            setLecs(lectureID)
+
+                            if(typeof(lectureURL)==='undefined'||lectureURL===null){
+                               // test(lectureID)
+                            } else {
+                                    generateVidPlayer(lectureURL)
+                                    videoPlayer.loadVideo(lectureURL).then(function(id) {
+                                        player.scrollIntoView();
+                                    })
+                                    .catch(function(error) {
+                                        console.log(error)
+                                    });
+                                }
+                            var settings = {
+                                "url": "<%=devFun%>/updateCurrLec/<%=uid%>/<%=course.id%>/"+lectureID,
+                                "method": "POST",
+                                "timeout": 0,
+                                "headers": {
+                                    "Content-Type": "application/json"
+                                }
+                            };
+                                    
+                            $.ajax(settings).done(function (response) {
+                            });
+                        }
+                        
+                        setLecs('<%-currentLectureID%>')
+
+                        if(typeof(currLecURL)==='undefined'){
+                               // test(currLecID)
+                        } else generateVidPlayer(currLecURL)
+
+                    </script>

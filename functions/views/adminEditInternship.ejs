@@ -1,0 +1,47 @@
+<% layout('/template/adminBoilerplate') -%>
+
+
+    <div class="container my-5">
+        <h3 class="text-center">Internship</h3>
+        <form action="<%=devFun%>/adminEditInternship/<%= uid %>/<%= internship.id %>?_method=PUT" method="post" class="row">
+            <div class="col-2 col-lg-4"></div>
+            <div class="col-8 col-lg-4 my-5">
+                <div class="mb-5 row ">
+                    <label for="internshipRole" class="form-label">Internship Role</label>
+                    <input type="text" class="form-control text-light bg-transparent border-0 border-bottom border-info"
+                        id="internshipRole"  value="<%= internship.data().internshipRole %>" name="internshipRole">
+                </div>
+                <div class="mb-5 row ">
+                    <label for="internshipExperience" class="form-label">Duration</label>
+                    <input type="text" class="form-control text-light bg-transparent border-0 border-bottom border-info"
+                        id="internshipDuration" value="<%= internship.data().internshipDuration %>" name="internshipDuration">
+                </div>
+                <div class="mb-5 row ">
+                    <label for="" class="form-label">City</label>
+                    <input type="text" class="form-control text-light bg-transparent border-0 border-bottom border-info"
+                        id="internshipCity" value="<%= internship.data().internshipCity %>" name="internshipCity">
+                </div>
+                <div class="mb-5 row ">
+                    <label for="" class="form-label">Country</label>
+                    <input type="text" class="form-control text-light bg-transparent border-0 border-bottom border-info"
+                        id="internshipCountry" value="<%= internship.data().internshipCountry %>" name="internshipCountry">
+                </div>
+                <div class="row d-flex flex-column align-items-center mt-5">
+                    <button type="submit" class="btn btn-info w-50 mb-3">Save and Exit</button>
+                     <div class="btn btn-danger w-50" id="btnDelete">Delete internship</div>
+                </div>
+            </div>
+            <div class="col-2 col-lg-4"></div>
+        </form>
+        <form action="<%=devFun%>/adminDeleteInternship/<%=uid%>/<%=internship.id%>?_method=DELETE"
+            method="post" id="deleteForm" hidden>
+        </form>
+    </div>
+
+    <script>
+        document.querySelector('#btnDelete').addEventListener('click', () => {
+            const form = document.querySelector('#deleteForm')
+            // console.log(form)
+            form.submit()
+        })
+    </script>

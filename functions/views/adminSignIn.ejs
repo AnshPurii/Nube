@@ -1,0 +1,104 @@
+<% layout('/template/adminBoilerplate') -%>
+ 
+                <% if(locals.email&&locals.pwd){const pemail=email; const ppwd = pwd} %>
+
+                    <div class="container">
+                        <div class="row">
+                            <h3 class="text-center my-5 text-light">Admin Sign In</h3>
+                            <form method="post" novalidate class="needs-validation col-8 offset-2 col-lg-4 offset-lg-4"
+                                hidden>
+                                <div class="formInput mb-5">
+                                    <label for="email" class="form-label text-white-50">Email ID</label>
+                                    <input type="email" name="email" id="email"
+                                        class="form-control text-light  bg-dark border-0 border-bottom border-info"
+                                        required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please enter a valid email ID
+                                    </div>
+                                </div>
+                                <div class="formInput mb-5">
+                                    <label for="password" class="form-label text-white-50">Enter Password</label>
+                                    <input type="password" name="password" id="password2"
+                                        class="form-control text-light  bg-dark border-0 border-bottom border-info"
+                                        required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please enter a valid password
+                                    </div>
+                                </div>
+                                <p class="text-center">Not a user? <a href="<%= devFun %>/adminRegister">Register</a>
+                                </p>
+                                <div class="submit container">
+                                    <div class="cta row justify-content-center">
+                                        <button type="button" class="col-6  btn btn-lg btn-info">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+                    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+                    <script src="<%=devEnv%>__/firebase/init.js"></script>
+                    <script src="<%= devEnv %>assets/js/auth.js "></script>
+
+                    <script>
+                        firebase.auth().onAuthStateChanged(user => {
+                            if (user) {
+                                user.getIdTokenResult()
+                                    .then((idTokenResult) => {
+                                        if (!!idTokenResult.claims.admin) {
+
+                                            window.location = "<%=devFun%>/adminConsole/" + user.uid
+                                            // ...
+                                        } else {
+                                            window.location = '<%=devFun%>'
+                                        }
+                                    }).catch((error) => {
+                                        console.log(error);
+                                    });
+                            }
+                            else {
+                                document.querySelector('form').hidden = false
+                            }
+                        });
+
+                        // if('<%#=email%>'.length&&'<%#=pwd%>'.length){
+                        if(typeof pemail!=='undefined' && typeof ppwd!=='undefined'){
+                            firebase.auth().signInWithEmailAndPassword(pemail, ppwd)
+                                .then((userCredential) => {
+                                    // Signed in
+
+                                })
+                                .catch((error) => {
+                                    feedbackDiv.style.display = 'inline'
+                                    feedbackDiv.innerText = error.message
+                                });
+                        }
+
+                        const email = document.querySelector('#email')
+                        const pwd = document.querySelector('#password2')
+                        const feedbackDiv = document.querySelectorAll('.invalid-feedback')[1]
+                        const redirectAdmin = '<%=devFun%>/adminConsole/'
+                        const redirect = '<%=devFun%>'
+                        document.querySelector('.cta button').addEventListener('click', () => {
+                            event.preventDefault()
+                            event.stopPropagation()
+                            console.log('asdf')
+
+                            firebase.auth().signInWithEmailAndPassword(email.value, pwd.value)
+                                .then((userCredential) => {
+                                    // Signed in
+
+                                })
+                                .catch((error) => {
+                                    feedbackDiv.style.display = 'inline'
+                                    feedbackDiv.innerText = error.message
+                                });
+                        })
+
+                    </script>

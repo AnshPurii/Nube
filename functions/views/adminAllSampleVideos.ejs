@@ -1,0 +1,127 @@
+<% layout('/template/adminBoilerplate') -%>
+    <div class="container my-5 page">
+        <div class="row d-flex flex-row justify-content-between mt-5 mx-2">
+            <h3 class="text-center">DaVinciResolve 2021</h3>
+            <h5 class="text-center">Sample Videos</h5>
+        </div>
+        
+        <% if(sampleVideos.length===0) { %>
+            <div class="row d-flex justify-content-center mt-5">
+                <a class="btn btn-info mt-3 btnAddModule" style="width: fit-content;" href="<%= devFun %>/adminAddSampleVideo/<%= uid %>/<%= courseID %>/0">
+                    <button class="btn btn-info" style="width: fit-content;">Add the first sample video</button>
+                </a>
+            </div>
+        <% } %>
+
+        <% sampleVideos.forEach((sample, index) => { %> 
+            <div class="row sample mt-5 py-5 border-0 border-bottom border-info">
+                <div class="col-12 col-lg-3 d-flex align-items-center">
+                    <div class="thumbnail"> <img class="img-fluid"
+                            src="<%=sample.data().thumbnailURL%>"
+                            alt=""></div>
+                </div>
+                    <div class="col-12 col-lg-9 d-flex justify-content-between align-items-center ps-5 py-2 ">
+                        <div class="row w-75 d-flex flex-column ">
+                            <p class=" m-0 p-0"> Sample <%=sample.data().sampleOrder%> </p>
+                            <p class="m-0 p-0 fs-4"><%=sample.data().sampleName%></p>
+                        </div>
+
+                        <div class="d-flex flex-column">
+                            <a class="btn btn-info btnEditSample" style="width: fit-content;" href="<%= devFun %>/adminEditSampleVideo/<%= uid %>/<%= courseID %>/<%= sample.id %>" >
+                                <i class="fas fa-pen "></i>
+                            </a>
+                            <a class="btn btn-info mt-3 btnAddSample" style="width: fit-content;" href="<%= devFun %>/adminAddSampleVideo/<%= uid %>/<%= courseID %>/<%= sample.data().sampleOrder %>">
+                                <i class="fas fa-plus "></i>
+                            </a>
+                         
+                        </div>
+                  
+                    </div>
+            </div>
+        <% });  %>
+            
+       
+            <div class=" row w-100 my-5 ">
+                <nav aria-label=" breadcrumb">
+                    <ol class="breadcrumb d-flex justify-content-center">
+                        <li class="breadcrumb-item"><a
+                                href="<%= devFun %>/adminAllCourses/<%=uid%>">Courses</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Sample Videos
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- <script>
+
+        const expand = function(element, moduleDiv, parentDiv, url, action) {
+            var toggleDetails = true;
+            const resultDiv = document.createElement('div')
+            element.addEventListener('click', () => {
+                if (toggleDetails) {
+                    axios.get(url)
+                        .then(function (response) {
+                            // handle success
+                            resultDiv.innerHTML = response.data
+                        })
+                        .catch(function (error) {
+                            // handle error
+                            console.log(error);
+                        })
+                        .then(function () {
+                            // always executed
+                        });
+                    element.classList.remove('btn-primary')
+                    element.classList.add('btn-warning')
+                    element.innerHTML = ' <i class="fas fa-minus "></i>'
+                }
+                else {
+                    resultDiv.innerHTML = ''
+                    element.classList.remove('btn-warning')
+                    element.classList.add('btn-primary')
+                    if(action==='add')
+                    element.innerHTML = ' <i class="fas fa-plus "></i>'
+                    else if(action==='edit')
+                    element.innerHTML = ' <i class="fas fa-pen "></i>'
+                    else element.innerHTML = ' <i class="fas fa-file-alt "></i>'
+                }
+                    parentDiv.appendChild(resultDiv)
+                    toggleDetails = !toggleDetails
+                })
+        }
+        
+        document.querySelectorAll('.btnAddSample').forEach((element) => {
+            const parentDiv = element.parentElement.parentElement.parentElement
+            const url = '<%#= devFun %>/adminAddSampleVideo/<%#= uid %>/<%#= courseID %>/'+parentDiv.id
+            const action = 'add'
+            expand(element, parentDiv, parentDiv, url,action)
+        })
+        document.querySelectorAll('.btnEditSample').forEach((element) => {
+            const parentDiv = element.parentElement.parentElement.parentElement
+            const url = '<%#= devFun %>/adminEditSampleVideo/<%#= uid %>/<%#= courseID %>/'+parentDiv.id
+            const action = 'edit'
+            expand(element, parentDiv, parentDiv, url,action)
+        })
+        
+         if(!document.querySelectorAll('.sample').length){
+                axios.get('<%#= devFun %>/adminAddSampleVideo/<%#= uid %>/<%#= courseID %>/0')
+                        .then(function (response) {
+                            // handle success
+                            document.querySelector('.page').innerHTML =  response.data
+                        })
+                        .catch(function (error) {
+                            // handle error
+                            console.log(error);
+                        })
+                        .then(function () {
+                            // always executed
+                        });
+         }
+
+       
+
+    </script> -->

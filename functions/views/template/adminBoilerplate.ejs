@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- admin side boilerplate template to load scripts and include common components -->
+<!-- admin side only works for desktop, it is not responsive -->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+                    <link rel="stylesheet" href="<%=devEnv%>assets/vendor/bootstrap/bootstrap.min.css">
+
+                    <script src="https://kit.fontawesome.com/32caa73f09.js" crossorigin="anonymous"></script>
+                    <link rel="stylesheet" href="<%=devEnv%>/assets/css/adminStyles.css">
+                    <title>NFA Admin</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class=" container-fluid">
+            <a class="navbar-brand ms-5 my-3" href="<%= devFun %>"> <img src="<%=devEnv%>assets/img/whiteLogo.png"
+                    style="width: fit-content; height: 60px;" alt=""></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse position-relative" id="navbarSupportedContent">
+                <ul class="navbar-nav position-absolute end-0 me-5 mb-2 mb-lg-0 fs-6 fw-light">
+                    <%# if(locals.userRecord){ %>
+                        <li class="nav-item">
+                            <a class="nav-link authNeeded text-light ms-3" aria-current="page"
+                                href="<%= devFun %>/adminAllCourses">Courses</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link authNeeded text-light ms-3"
+                                href="<%= devFun %>/adminAllStudents">Students</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link authNeeded text-light ms-3"
+                                href="<%= devFun %>/adminTestimonials">Testimonials</a>
+                        </li>
+
+                        <li class="nav-item dropdown ">
+                            <a class="nav-link dropdown-toggle  text-light ms-3" href="#" id="navbarDropdown"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Hiring
+                            </a>
+                            <ul class="dropdown-menu bg-dark fs-6" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item authNeeded text-light bg-dark"
+                                        href="<%= devFun %>/adminJobs">Jobs</a></li>
+                                <li><a class="dropdown-item authNeeded text-light bg-dark"
+                                        href="<%= devFun %>/adminInternships">Internships</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btnSignOut nav-link authNeeded text-light ms-3" href="#">Sign Out</a>
+                        </li>
+                        <%# } else { %>
+                            <li class="nav-item">
+                                <a class="nav-link signInBtn text-light ms-3" href="<%= devFun %>/admin">Sign In</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link signInBtn text-light ms-3"
+                                    href="<%= devFun %>/adminRegister ">Register</a>
+                            </li>
+                            <%# } %>
+
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+    <%- body -%>
+
+</body>
+
+<script src="<%=devEnv%>assets/vendor/jquery/jquery.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="<%=devEnv%>__/firebase/init.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+<script>
+
+// checking if user is admin
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            user.getIdTokenResult()
+                .then((idTokenResult) => {
+                    if (!!idTokenResult.claims.admin) {
+//showing components once signed in
+                        Array.from(document.querySelectorAll('.signInBtn')).forEach(function (element) {
+                            element.style.display = 'none'
+                        })
+                        Array.from(document.querySelectorAll('.authNeeded')).forEach(function (element) {
+                            element.style.display = 'inline-block'
+                        })
+                        const dropdown = document.querySelector('#navbarDropdown')
+                        if (dropdown) dropdown.style.display = 'inline-block'
+                        Array.from(document.querySelectorAll('.authNeeded')).forEach(function (link) {
+                            link.href = link.href.concat('/', user.uid)
+                            //"?user=",
+                        })
+
+                        document.querySelectorAll('.btnSignOut').forEach(function (btn) {
+                            btn.addEventListener('click', () => {
+                                firebase.auth().signOut().then(() => {
+                                    // Sign-out successful.
+                                    window.location = '<%=devFun%>'
+                                }).catch((error) => {
+                                    // An error happened.
+                                    console.log('not signed out', error)
+                                });
+                            })
+                        })
+                        // if not admin
+                    } else {
+                        window.location = '<%=devFun%>'
+                    }
+                }).catch((error) => {
+                    console.log(error);
+                });
+
+
+
+        }
+
+        else {
+            Array.from(document.querySelectorAll('.signInBtn')).forEach(function (element) {
+                element.style.display = 'inline-block'
+            })
+            Array.from(document.querySelectorAll('.authNeeded')).forEach(function (element) {
+                element.style.display = 'none'
+            })
+            document.querySelector('#navbarDropdown').style.display = 'none'
+        }
+
+    })
+
+</script>
+
+</html>

@@ -1,0 +1,118 @@
+<% layout('/template/boilerplate') -%>
+ 
+                    <h3 style="margin-top: 180px; text-align: center;">My Cart</h3>
+                    <% if(course){ %> 
+                    <div class="getInTouchContainer cartContainer">
+                        <div class="pageHead">
+                            <%# let priceTotal = 0, discountTotal = 0 %> 
+                            <%# coursesInCart.forEach(course => { %> 
+                           
+                            <div class="cartItems">
+                                <div class="cartItem">
+                                    <div class="cartCourse">
+                                        <a class="courseLink" href=" <%= devFun %>/coursePage ">
+                                            <div class="course-content">
+                                                <div class="course-title"><%= course.data().courseName %> </div>
+                                                <div class="details">
+                                                    <div class="instructor-name"><%= course.data().instructorName %></div>
+                                                    <div class="duration">Duration : <%= durationUnit(course.data().duration) %></div>
+                                                </div>
+                                                <div class="description">
+                                                    <%= course.data().courseDescription %>
+                                                </div>
+                                                <div class="tags">
+                                                    <div class="tag" <%if( course.data().bestsellerTag===null){%>
+                                                        hidden <% } %>> Bestseller </div>
+                                                    <div class="tag" <%if( course.data().beginnerTag===null){%> hidden
+                                                        <% } %>> Beginner
+                                                    </div>
+                                                    <div class="tag" <%if( course.data().intermediateTag===null){%>
+                                                        hidden <% } %>> Intermediate </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="cartPrice">
+                                        <div class="price"> &#8377; <%= course.data().coursePrice %>/-</div>
+                                        <a href="<%= devFun %>/removeFromCart/<%= uid %>/<%= course.id %>  "><div class="language">Remove from cart</div></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <%# priceTotal+=parseInt(course.data().coursePrice) ; discountTotal += parseInt(course.data().discountAmount) %> 
+                            <%# courseIDs.push(course.id) %> 
+                            <%# }) %> 
+                        </div>
+                        <div class="cartTotal">
+                            <div class="cartTotalDetails">
+                                <p> Total :</p>
+                                <div class="cutPrice">&#8377;<%= course.data().coursePrice %> /-</div>
+                                <div class="totalPrice">&#8377;<%= parseInt(course.data().coursePrice)-parseInt(course.data().discountAmount) %> /-</div>
+
+                                <div class="promotions">
+                                    <p>Promotional</p>
+                                    Discount is applied !
+                                </div>
+                            </div>
+                            <div class="cta">
+                                <button id="rzp-button1">
+                                Pay
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <script src="<%=devEnv%>assets/vendor/jquery/jquery.min.js"></script>
+                    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+                    <script>
+                      
+                        $(document).ready(function(){
+                            var settings = {
+                                "url": "<%=devFun%>/create/orderId/<%=uid%>",
+                                "method": "POST",
+                                "timeout": 0,
+                                "headers": {
+                                    "Content-Type": "application/json"
+                                },
+                                "data": JSON.stringify({
+                                    "amount": "<%=(parseInt(course.data().coursePrice)-parseInt(course.data().discountAmount))*100%> "
+                                })
+                            };
+
+                            //creates new orderId everytime
+                            $.ajax(settings).done(function (response) {
+                                $("button").show();
+                                var options = {
+                                    "key": "rzp_test_0inHQCBiPi4Hjb", // Enter the Key ID generated from the Dashboard
+                                    "amount":  response.order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                                    "currency": "INR",
+                                    "name": "Nube Film Academy",
+                                    "description": "Purchase of courses from Nube Film Academy",
+                                    "image": "https://firebasestorage.googleapis.com/v0/b/nubefilmacademysite.appspot.com/o/embossed%20on%20black.png?alt=media&token=9c74b90f-3e3e-4e85-b29c-ef388477085b",
+                                    "order_id": response.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                                    "callback_url": "<%=devFun%>/verify/orderId/<%=uid%>",
+                                    "notes": {
+                                        "courseName": "<%= course.data().courseName%>"
+                                    },
+                                    "prefill": {
+                                        "name":response.student.name,
+                                        "email": response.student.email,
+                                        "contact":response.student.number
+                                    },
+                                    "theme": {
+                                        "color": "#15829a;"
+                                    }
+                                };
+                                var rzp1 = new Razorpay(options);
+                                document.getElementById('rzp-button1').onclick = function(e){
+                                    rzp1.open();
+                                    e.preventDefault();
+                                }
+                            });
+                        });
+
+                      
+                    </script>
+                    <% } else { %>
+                        <h3 class="text-center mt-5 pt-5" style="height: 40vh;">Oops! You have not added any courses to the cart yet :(</h3> 
+                    <% } %> 
+
+                 

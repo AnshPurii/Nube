@@ -1,0 +1,20 @@
+<% layout('/template/boilerplate') -%>
+ 
+                    <div class="pageHead">
+                        <h3>Jobs</h3>
+
+                        <div class="jobContainer">
+                            <%  jobs.forEach(job => { %>
+                                <div class="job">
+                                    <div class="jobHead"><%=job.data().jobRole%> </div>
+                                    <div class="jobDuration">Duration : <%=job.data().jobExperience%></div>
+                                    <div class="jobLocation"><%=job.data().jobCity%>, <%=job.data().jobCountry%></div>
+                                    <div class="postDate">Posted : <%=job.data().postTime.toDate().toDateString()%></div>
+                                </div>
+                                <% }); %> 
+                        </div>
+                        <div class="cta">
+                            <a href="<%= devFun %>/getInTouch"><button>Apply</button></a>
+                        </div>
+
+                    </div>
